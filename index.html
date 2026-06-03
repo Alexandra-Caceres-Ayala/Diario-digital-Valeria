@@ -2,8 +2,16 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>⚡ VALERIA // MUNDO ESPIRITUAL ⚡</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Cinzel&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- LIBRERÍAS DE 2026: GSAP + ScrollTrigger + Lenis (Scroll Inercial) -->
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
     <style>
         :root {
             --sangre: #c41e3a;
@@ -12,12 +20,15 @@
             --oro: #ffd700;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            cursor: none; 
-        }
+        /* Reset y cursor oculto */
+        * { box-sizing: border-box; margin: 0; padding: 0; cursor: none; }
+
+        /* Estilos base para Lenis (Scroll Smooth) */
+        html.lenis { height: auto; }
+        .lenis.lenis-smooth { scroll-behavior: auto; }
+        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+        .lenis.lenis-stopped { overflow: hidden; }
+        .lenis.lenis-scrolling iframe { pointer-events: none; }
 
         body {
             background-color: var(--noche);
@@ -27,92 +38,83 @@
         }
 
         /* ==========================================
-           FONDO CINEMATOGRÁFICO PANTALLA COMPLETA
-           (ESTILO ROCKSTAR GAMES)
+           CONTENEDOR PRINCIPAL PINNEADO POR GSAP
            ========================================== */
-        #fondo-cinematico {
-            position: fixed;
-            top: 0;
-            left: 0;
+        #escenario-maestro {
+            position: relative;
             width: 100vw;
             height: 100vh;
-            z-index: -1; /* Se queda detrás de todo */
+            overflow: hidden;
             background-color: #000;
         }
 
+        /* El Canvas de fondo (Scrubbing) */
         canvas {
-            width: 100%;
-            height: 100%;
-            /* ESTA ES LA CLAVE: Hace que la imagen llene la pantalla sin deformarse */
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             object-fit: cover; 
-            /* Oscurecemos un 30% la imagen para que las letras se lean perfecto */
-            filter: brightness(0.7); 
+            filter: brightness(0.6); 
+            z-index: 1;
         }
 
-        /* Indicador de Scroll superpuesto */
-        .scroll-indicador {
-            position: fixed;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
+        /* Capas Parallax (Elementos flotantes estilo HUD) */
+        .capa-parallax {
+            position: absolute;
             font-family: 'Cinzel', serif;
-            color: rgba(255, 255, 255, 0.8);
-            letter-spacing: 2px;
-            font-size: 0.9rem;
-            animation: latido 2s infinite;
-            z-index: 5;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 5px;
+            z-index: 2;
             pointer-events: none;
         }
 
+        #hud-1 { top: 20%; left: 5%; font-size: 0.8rem; transform: rotate(-90deg); }
+        #hud-2 { bottom: 15%; right: 5%; font-size: 1.2rem; color: rgba(196, 30, 58, 0.5); }
+        
+        #texto-scroll {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            animation: latido 2s infinite;
+        }
+
         @keyframes latido {
-            0%, 100% { opacity: 0.3; transform: translate(-50%, 0); }
-            50% { opacity: 1; transform: translate(-50%, 10px); }
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
         }
 
         /* ==========================================
-           CONTENEDOR DE SCROLL Y TARJETA
+           TARJETA ENMASCARADA (MASKING)
            ========================================== */
-        #zona-scroll {
-            height: 350vh; /* Altura para controlar la duración de la animación */
-            position: relative;
-        }
-
-        /* La tarjeta aparece al final del scroll */
-        #contenido-final {
-            min-height: 100vh;
+        #contenedor-tarjeta {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
-            /* Fondo con degradado oscuro para que la tarjeta destaque sobre el Canvas */
-            background: linear-gradient(to bottom, transparent, var(--noche) 80%);
+            z-index: 10;
+            /* La máscara circular empieza en 0 (invisible) */
+            clip-path: circle(0% at 50% 50%);
+            background: rgba(10, 10, 18, 0.85); /* Fondo que oscurece todo al final */
         }
 
         .tarjeta-magica {
-            background: rgba(10, 10, 18, 0.7);
-            border: 1px solid rgba(196, 30, 58, 0.5);
+            border: 1px solid rgba(196, 30, 58, 0.6);
             padding: 50px;
             text-align: center;
-            backdrop-filter: blur(15px); /* Efecto cristal premium */
-            border-radius: 4px;
+            background: transparent;
             max-width: 600px;
             width: 100%;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            position: relative;
-            z-index: 10;
         }
 
-        h1 { 
-            font-family: 'Cinzel', serif; 
-            color: var(--nieve); 
-            font-size: 2.8rem;
-            margin-bottom: 15px;
-            letter-spacing: 3px;
-        }
-
-        h1 span {
-            color: var(--sangre);
-        }
+        h1 { font-family: 'Cinzel', serif; color: var(--nieve); font-size: 2.8rem; margin-bottom: 15px; letter-spacing: 3px; }
+        h1 span { color: var(--sangre); }
 
         .btn-magico {
             background: transparent;
@@ -134,11 +136,10 @@
             transform: translateY(-3px);
         }
 
-        /* Gota espiritual del cursor */
+        /* Gota del cursor */
         .gota-espiritu {
             position: fixed;
-            width: 5px;
-            height: 5px;
+            width: 5px; height: 5px;
             background: var(--sangre);
             border-radius: 50%;
             pointer-events: none;
@@ -147,46 +148,54 @@
             box-shadow: 0 0 10px var(--sangre);
         }
 
-        @keyframes caer {
-            to { transform: translateY(30px) scale(0); opacity: 0; }
-        }
+        @keyframes caer { to { transform: translateY(30px) scale(0); opacity: 0; } }
     </style>
 </head>
 <body>
 
-    <!-- FONDO CINEMATOGRÁFICO FIJO (Estilo Rockstar) -->
-    <div id="fondo-cinematico">
+    <!-- CONTENEDOR MAESTRO (GSAP lo dejará fijo mientras hacemos scroll virtual) -->
+    <div id="escenario-maestro">
+        
+        <!-- Capa 1: Canvas (Video Scrubbing) -->
         <canvas id="canvas-anime"></canvas>
-    </div>
 
-    <!-- Indicador visual inicial -->
-    <div class="scroll-indicador" id="texto-scroll">↓ INICIAR SINCRONIZACIÓN ↓</div>
+        <!-- Capas Parallax (Se moverán a distintas velocidades) -->
+        <div class="capa-parallax" id="hud-1">SYS.SYNC: ACTIVE</div>
+        <div class="capa-parallax" id="hud-2">SPIRIT BOUNDARY // 001</div>
+        <div id="texto-scroll">↓ INICIAR SINCRONIZACIÓN ↓</div>
 
-    <!-- ZONA INVISIBLE PARA HACER SCROLL -->
-    <div id="zona-scroll"></div>
-
-    <!-- TARJETA FINAL -->
-    <div id="contenido-final">
-        <div class="tarjeta-magica">
-            <h1>BIENVENIDA, <span>VALERIA</span></h1>
-            <p style="margin-bottom: 20px; font-size: 1.1rem; line-height: 1.8; color: #ccc;">
-                Has cruzado el límite. Las estadísticas del Mundo Espiritual se han sincronizado correctamente.
-            </p>
-            <p style="color: var(--oro); font-size: 0.9rem; letter-spacing: 2px;">STATUS: 100% CONNECTED</p>
-            
-            <button class="btn-magico" id="btn-activar">
-                Desbloquear Audio
-            </button>
+        <!-- Capa Máscara: Tarjeta (Aparecerá expandiéndose desde el centro) -->
+        <div id="contenedor-tarjeta">
+            <div class="tarjeta-magica">
+                <h1>BIENVENIDA, <span>VALERIA</span></h1>
+                <p style="margin-bottom: 20px; font-size: 1.1rem; line-height: 1.8; color: #ccc;">
+                    Has cruzado el límite. Las estadísticas del Mundo Espiritual se han sincronizado correctamente.
+                </p>
+                <p style="color: var(--oro); font-size: 0.9rem; letter-spacing: 2px;">STATUS: 100% CONNECTED</p>
+                
+                <button class="btn-magico" id="btn-activar">Desbloquear Audio</button>
+            </div>
         </div>
+
     </div>
 
-    <!-- REPRODUCTOR DE AUDIO LIMPIO (Requiere que subas musica.mp3 a GitHub) -->
+    <!-- AUDIO -->
     <audio id="audio-tema" src="musica.mp3"></audio>
 
     <script>
-        /* ==========================================
-           MAGIA DEL RATÓN
-           ========================================== */
+        // 1. INICIALIZAR LENIS (SCROLL INERCIAL)
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            smooth: true
+        });
+
+        // Conectar Lenis con el Ticker de GSAP para que vayan en perfecta sincronía
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => { lenis.raf(time * 1000) });
+        gsap.ticker.lagSmoothing(0);
+
+        // 2. MAGIA DEL RATÓN
         document.addEventListener('mousemove', (e) => {
             const gota = document.createElement('div');
             gota.className = 'gota-espiritu';
@@ -196,19 +205,16 @@
             setTimeout(() => gota.remove(), 1000);
         });
 
-        /* ==========================================
-           MAGIA DEL SCROLL (FULL SCREEN)
-           ========================================== */
+        // 3. REGISTRAR GSAP Y CONFIGURAR CANVAS
+        gsap.registerPlugin(ScrollTrigger);
+
         const canvas = document.getElementById("canvas-anime");
         const context = canvas.getContext("2d");
-        const textoScroll = document.getElementById("texto-scroll");
+        const totalFotogramas = 26; // Tu número de imágenes
 
-        // 🔥 NÚMERO DE FOTOGRAMAS (Asegúrate de que sea el correcto de tu carpeta)
-        const totalFotogramas = 26; 
-        
         const rutaImagen = index => {
-            const numeroConCeros = index.toString().padStart(2, '0'); 
-            return `frames/frame_${numeroConCeros}_delay-0.09s.jpg`; 
+            const num = index.toString().padStart(2, '0'); 
+            return `frames/frame_${num}_delay-0.09s.jpg`; 
         };
 
         const imagenes = [];
@@ -218,42 +224,56 @@
             imagenes.push(img);
         }
 
+        // Variable objeto para que GSAP pueda animarla numéricamente
+        const animeTracker = { frame: 0 };
+
         imagenes[0].onload = () => {
-            // El canvas se ajusta a la resolución de la imagen original, 
-            // el CSS "object-fit: cover" se encarga de que llene la pantalla
             canvas.width = imagenes[0].width;
             canvas.height = imagenes[0].height;
             context.drawImage(imagenes[0], 0, 0);
         };
 
-        window.addEventListener('scroll', () => {
-            const scrollTop = document.documentElement.scrollTop;
-            const maxScroll = document.getElementById("zona-scroll").scrollHeight - window.innerHeight;
-            
-            const fraccionScroll = Math.max(0, Math.min(1, scrollTop / maxScroll));
-            
-            const indexFotograma = Math.min(
-                totalFotogramas - 1,
-                Math.floor(fraccionScroll * totalFotogramas)
-            );
+        // Función para renderizar el fotograma actual en el canvas
+        function render() {
+            if (imagenes[animeTracker.frame]) {
+                context.drawImage(imagenes[animeTracker.frame], 0, 0);
+            }
+        }
 
-            requestAnimationFrame(() => {
-                if (imagenes[indexFotograma]) {
-                    context.drawImage(imagenes[indexFotograma], 0, 0);
-                }
-            });
-
-            // Ocultar el texto de "Bajar" cuando ya ha empezado a bajar
-            if (scrollTop > 50) {
-                textoScroll.style.opacity = '0';
-            } else {
-                textoScroll.style.opacity = '1';
+        // 4. CREAR LA LÍNEA DE TIEMPO MAESTRA (TIMELINE GSAP)
+        const tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: "#escenario-maestro",
+                start: "top top",
+                end: "+=400%", // Obliga al usuario a hacer scroll equivalente a 4 pantallas
+                pin: true,     // Fija el escenario principal
+                scrub: 1.5,    // EL SECRETO: 1.5 segundos de inercia extra tras parar de scrollear
             }
         });
 
-        /* ==========================================
-           AUDIO LIMPIO (SIN ANUNCIOS)
-           ========================================== */
+        // A. Animación del Video (Scrubbing)
+        tl.to(animeTracker, {
+            frame: totalFotogramas - 1,
+            snap: "frame",     // Obliga a que sean números enteros (0, 1, 2...)
+            ease: "none",
+            onUpdate: render   // Cada vez que el frame cambia, repinta el canvas
+        }, 0); // El ", 0" al final significa que empieza al inicio del scroll
+
+        // B. Ocultar el texto de inicio rápidamente
+        tl.to("#texto-scroll", { opacity: 0, duration: 0.1 }, 0);
+
+        // C. Parallax por capas (HUDs) - Se mueven a ritmos distintos
+        tl.to("#hud-1", { y: -200, opacity: 0, ease: "none" }, 0);
+        tl.to("#hud-2", { y: 300, x: 100, opacity: 0, scale: 1.5, ease: "none" }, 0);
+
+        // D. Enmascaramiento (Masking) de la tarjeta final
+        // Aparece en la segunda mitad de la animación
+        tl.to("#contenedor-tarjeta", {
+            clipPath: "circle(150% at 50% 50%)", // Expande el círculo hasta cubrir todo
+            ease: "power2.inOut",
+        }, 0.4); // Empieza cuando el scroll va por el 40%
+
+        // 5. AUDIO LIMPIO
         const btnActivar = document.getElementById('btn-activar');
         const reproductorAudio = document.getElementById('audio-tema');
 
