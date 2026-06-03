@@ -19,11 +19,12 @@
            PALETA MANGA POP / NEO-BRUTALISMO
            ========================================== */
         :root {
-            --fondo-vibrante: #ffe600; /* Amarillo eléctrico */
+            --fondo-vibrante: #ffe600; 
             --rosa-anime: #ff007b;
             --cian-magico: #00e5ff;
             --morado-oscuro: #2d00f7;
-            --linea-comic: #1a1a1a; /* Borde negro grueso */
+            --verde-toxico: #39ff14;
+            --linea-comic: #1a1a1a; 
             --blanco-papel: #ffffff;
         }
 
@@ -35,17 +36,43 @@
             cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><text y='20' font-size='20'>✨</text></svg>"), auto;
         }
 
-        /* FONDO ESTILO TRAMA DE MANGA (Puntos / Halftone) */
+        /* FONDO ESTILO TRAMA DE MANGA */
         body {
             font-family: 'Quicksand', sans-serif;
             color: var(--linea-comic);
             background-color: var(--fondo-vibrante);
-            /* Patrón de puntos estilo cómic retro */
             background-image: radial-gradient(var(--linea-comic) 1.5px, transparent 1.5px);
             background-size: 30px 30px;
             min-height: 100vh;
-            padding: 40px 20px;
+            padding: 0 0 40px 0; /* Ajustado para la marquesina */
             overflow-x: hidden;
+        }
+
+        /* ==========================================
+           NUEVO: MARQUESINA ANIMADA
+           ========================================== */
+        .marquesina {
+            background: var(--linea-comic);
+            color: var(--verde-toxico);
+            font-family: 'Mochiy Pop One', sans-serif;
+            padding: 10px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            border-bottom: 4px solid var(--linea-comic);
+            margin-bottom: 30px;
+        }
+
+        .marquesina p {
+            display: inline-block;
+            animation: scrollTexto 15s linear infinite;
+            margin: 0;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+        }
+
+        @keyframes scrollTexto {
+            0% { transform: translateX(100vw); }
+            100% { transform: translateX(-100%); }
         }
 
         /* ==========================================
@@ -57,39 +84,48 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
+            padding: 0 20px;
         }
 
         /* ==========================================
-           TARJETAS ESTILO CÓMIC (Neo-Brutalism)
+           ANIMACIÓN DE ENTRADA (EFECTO POP!)
+           ========================================== */
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.8) translateY(50px); }
+            70% { transform: scale(1.05); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* ==========================================
+           TARJETAS ESTILO CÓMIC
            ========================================== */
         .tarjeta-comic {
             background-color: var(--blanco-papel);
             border: 5px solid var(--linea-comic);
             border-radius: 15px;
             padding: 30px;
-            /* La sombra sólida es la clave de este estilo */
             box-shadow: 10px 10px 0px var(--linea-comic);
             transition: all 0.2s ease-in-out;
             position: relative;
+            /* Aplicamos la animación de entrada */
+            opacity: 0; 
+            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
-        /* EFECTO REBOTE EUFÓRICO AL PASAR EL RATÓN */
+        /* Retrasos para que aparezcan una tras otra */
+        .tarjeta-comic:nth-child(2) { animation-delay: 0.2s; }
+        .tarjeta-comic:nth-child(3) { animation-delay: 0.4s; }
+        .tarjeta-comic:nth-child(4) { animation-delay: 0.6s; }
+
         .tarjeta-comic:hover {
-            transform: translate(-5px, -5px) scale(1.02);
+            transform: translate(-5px, -5px) scale(1.02) !important;
             box-shadow: 15px 15px 0px var(--rosa-anime);
             border-color: var(--rosa-anime);
+            z-index: 10;
         }
 
-        /* CLASES PARA COLORES ALTERNOS */
-        .borde-cian:hover {
-            box-shadow: 15px 15px 0px var(--cian-magico);
-            border-color: var(--cian-magico);
-        }
-        
-        .borde-morado:hover {
-            box-shadow: 15px 15px 0px var(--morado-oscuro);
-            border-color: var(--morado-oscuro);
-        }
+        .borde-cian:hover { box-shadow: 15px 15px 0px var(--cian-magico); border-color: var(--cian-magico); }
+        .borde-morado:hover { box-shadow: 15px 15px 0px var(--morado-oscuro); border-color: var(--morado-oscuro); }
 
         .header-titulo {
             grid-column: 1 / -1;
@@ -101,14 +137,35 @@
             box-shadow: 10px 10px 0px var(--linea-comic);
             transform: rotate(-2deg);
             margin-bottom: 20px;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
-        /* ==========================================
-           TIPOGRAFÍA Y TEXTOS
-           ========================================== */
+        /* Avatar de perfil */
+        .avatar-contenedor {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid var(--linea-comic);
+            box-shadow: 5px 5px 0px var(--morado-oscuro);
+            background: var(--fondo-vibrante);
+            /* Animación de latido */
+            animation: latido 2s infinite;
+        }
+
+        @keyframes latido {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
         h1 {
             font-family: 'Mochiy Pop One', sans-serif;
-            font-size: 3.5rem;
+            font-size: clamp(2rem, 5vw, 3.5rem); /* Responsive */
             color: var(--blanco-papel);
             text-shadow: 4px 4px 0px var(--linea-comic);
             letter-spacing: 2px;
@@ -136,20 +193,9 @@
             padding-bottom: 10px;
         }
 
-        p {
-            font-size: 1.15rem;
-            line-height: 1.6;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
+        p { font-size: 1.15rem; line-height: 1.6; margin-bottom: 15px; font-weight: 600; }
 
-        /* ETIQUETAS DE HABILIDADES (Estilo RPG) */
-        .skills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 15px;
-        }
+        .skills { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; }
 
         .tag-skill {
             background: var(--fondo-vibrante);
@@ -162,44 +208,22 @@
             transition: transform 0.1s;
         }
 
-        .tag-skill:hover {
-            transform: scale(1.1);
-            background: var(--rosa-anime);
-            color: white;
-        }
-
-        /* ==========================================
-           BOTÓN REPRODUCTOR
-           ========================================== */
-        .btn-play-anime {
-            background: var(--rosa-anime);
-            color: white;
-            border: 4px solid var(--linea-comic);
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            font-size: 1.5rem;
-            box-shadow: 5px 5px 0px var(--linea-comic);
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding-left: 5px; /* Centrar el triángulo */
-        }
-
-        .btn-play-anime:hover {
-            background: var(--cian-magico);
-            transform: scale(1.1);
-        }
+        .tag-skill:hover { transform: scale(1.1) rotate(5deg); background: var(--rosa-anime); color: white; }
 
         .music-box {
             display: flex;
-            align-items: center;
-            gap: 20px;
+            flex-direction: column;
+            gap: 15px;
             background: #f0f0f0;
             border: 3px solid var(--linea-comic);
             padding: 15px;
             border-radius: 15px;
+        }
+
+        /* Ocultar el reproductor por defecto y hacerlo bonito */
+        audio {
+            width: 100%;
+            border-radius: 30px;
         }
 
         footer {
@@ -215,10 +239,32 @@
             position: relative;
             left: 50%;
             transform: translateX(-50%);
+            transition: all 0.3s;
+        }
+
+        footer:hover { background: var(--rosa-anime); color: white; transform: translateX(-50%) scale(1.1); }
+
+        /* Efectos flotantes JS */
+        .chispa {
+            position: fixed;
+            pointer-events: none;
+            font-size: 1.5rem;
+            animation: flotar 1s ease-out forwards;
+            z-index: 9999;
+        }
+
+        @keyframes flotar {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-100px) scale(0.5); opacity: 0; }
         }
     </style>
 </head>
 <body>
+
+    <!-- MARQUESINA -->
+    <div class="marquesina">
+        <p>⚡ CURRENT STATUS: CODING ⚡ LEVEL 14 UNLOCKED ⚡ DO NOT DISTURB ⚡ POWER LEVEL OVER 9000 ⚡</p>
+    </div>
 
     <div class="escenario">
         
@@ -230,6 +276,10 @@
 
         <!-- TARJETA 1: PERFIL (Morada) -->
         <article class="tarjeta-comic borde-morado">
+            <!-- AVATAR (Puedes cambiar la URL por una foto suya o un GIF) -->
+            <div class="avatar-contenedor">
+                <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Valeria&backgroundColor=ff007b" alt="Avatar de Valeria" class="avatar">
+            </div>
             <h2>⭐ Ficha de Personaje</h2>
             <p><strong>Nivel actual:</strong> 14 años.</p>
             <p><strong>Clase:</strong> Creadora / Estudiante.</p>
@@ -245,14 +295,19 @@
         <!-- TARJETA 2: MÚSICA (Rosa) -->
         <article class="tarjeta-comic">
             <h2>🎧 Opening Actual</h2>
-            <p>La canción que suena de fondo mientras salvo el mundo (o hago los deberes):</p>
+            <p>La banda sonora de mi vida. Dale al play para activar el modo épico:</p>
             
             <div class="music-box">
-                <button class="btn-play-anime" onclick="alert('¡BAM! 💥 Aquí enlazaremos tu playlist favorita.')">▶</button>
-                <div>
-                    <p style="margin-bottom: 0; font-size: 1.2rem; font-family: 'Mochiy Pop One', sans-serif;">Mi Canción Favorita</p>
-                    <p style="margin-bottom: 0; color: #666;">Artista o Banda Anime</p>
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="font-size: 2.5rem;">🎶</div>
+                    <div>
+                        <p style="margin-bottom: 0; font-size: 1.2rem; font-family: 'Mochiy Pop One', sans-serif;">Pista Actual</p>
+                        <p style="margin-bottom: 0; color: #666; font-size: 0.9rem;">Elige tu canción favorita</p>
+                    </div>
                 </div>
+                <!-- REPRODUCTOR DE AUDIO REAL -->
+                <!-- Tía: Solo tienes que poner la URL de un .mp3 donde dice src="" -->
+                <audio controls src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
             </div>
         </article>
 
@@ -262,13 +317,13 @@
             <p>Las misiones épicas que estoy completando en el colegio y en la vida:</p>
             
             <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px;">
-                <div style="flex: 1; min-width: 250px; background: #f0f0f0; border: 3px solid var(--linea-comic); padding: 15px; border-radius: 10px;">
+                <div style="flex: 1; min-width: 250px; background: #f0f0f0; border: 3px solid var(--linea-comic); padding: 15px; border-radius: 10px; transition: transform 0.2s;">
                     <h3 style="font-family: 'Mochiy Pop One', sans-serif; margin-bottom: 10px;">🧪 Misión: Ciencias</h3>
                     <p style="font-size: 1rem;">Sobreviví al experimento del volcán con éxito.</p>
                 </div>
-                <div style="flex: 1; min-width: 250px; background: #f0f0f0; border: 3px solid var(--linea-comic); padding: 15px; border-radius: 10px;">
+                <div style="flex: 1; min-width: 250px; background: #f0f0f0; border: 3px solid var(--linea-comic); padding: 15px; border-radius: 10px; transition: transform 0.2s;">
                     <h3 style="font-family: 'Mochiy Pop One', sans-serif; margin-bottom: 10px;">💻 Misión: Código</h3>
-                    <p style="font-size: 1rem;">Programando mi propia web paso a paso.</p>
+                    <p style="font-size: 1rem;">Hackeando la matrix paso a paso.</p>
                 </div>
             </div>
         </article>
@@ -278,6 +333,32 @@
     <footer>
         Construido con magia ✨ por Valeria y su Tía 
     </footer>
+
+    <!-- SCRIPT DE MAGIA PARA HACER CLIC -->
+    <script>
+        const emojis = ['⭐', '✨', '💖', '🔥', '👾'];
+        
+        document.body.addEventListener('click', function(e) {
+            const chispa = document.createElement('div');
+            chispa.className = 'chispa';
+            // Elegir emoji aleatorio
+            chispa.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+            
+            // Posicionar donde se hizo clic
+            chispa.style.left = e.clientX + 'px';
+            chispa.style.top = e.clientY + 'px';
+            
+            // Variación aleatoria en la animación
+            chispa.style.transform = `rotate(${Math.random() * 360}deg)`;
+            
+            document.body.appendChild(chispa);
+            
+            // Eliminar elemento después de la animación
+            setTimeout(() => {
+                chispa.remove();
+            }, 1000);
+        });
+    </script>
 
 </body>
 </html>
