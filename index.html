@@ -7,7 +7,7 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Cinzel&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
     
-    <!-- LIBRERÍAS DE 2026: GSAP + ScrollTrigger + Lenis (Scroll Inercial) -->
+    <!-- LIBRERÍAS DE 2026: GSAP + ScrollTrigger + Lenis -->
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -20,10 +20,8 @@
             --oro: #ffd700;
         }
 
-        /* Reset y cursor oculto */
         * { box-sizing: border-box; margin: 0; padding: 0; cursor: none; }
 
-        /* Estilos base para Lenis (Scroll Smooth) */
         html.lenis { height: auto; }
         .lenis.lenis-smooth { scroll-behavior: auto; }
         .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
@@ -37,9 +35,6 @@
             overflow-x: hidden;
         }
 
-        /* ==========================================
-           CONTENEDOR PRINCIPAL PINNEADO POR GSAP
-           ========================================== */
         #escenario-maestro {
             position: relative;
             width: 100vw;
@@ -48,7 +43,6 @@
             background-color: #000;
         }
 
-        /* El Canvas de fondo (Scrubbing) */
         canvas {
             position: absolute;
             top: 0; left: 0;
@@ -58,7 +52,6 @@
             z-index: 1;
         }
 
-        /* Capas Parallax (Elementos flotantes estilo HUD) */
         .capa-parallax {
             position: absolute;
             font-family: 'Cinzel', serif;
@@ -89,7 +82,7 @@
         }
 
         /* ==========================================
-           TARJETA ENMASCARADA (MASKING)
+           TARJETA ENMASCARADA (TYPOGRAPHIC MASKING)
            ========================================== */
         #contenedor-tarjeta {
             position: absolute;
@@ -99,9 +92,18 @@
             justify-content: center;
             align-items: center;
             z-index: 10;
-            /* La máscara circular empieza en 0 (invisible) */
-            clip-path: circle(0% at 50% 50%);
-            background: rgba(10, 10, 18, 0.85); /* Fondo que oscurece todo al final */
+            background: rgba(10, 10, 18, 0.85);
+            
+            /* Aquí inyectamos el SVG con la palabra VALERIA como máscara */
+            --mask-size: 0vw;
+            -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 300'%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-family='Arial, sans-serif' font-weight='900' font-size='220' letter-spacing='10' fill='black'%3EVALERIA%3C/text%3E%3C/svg%3E");
+            -webkit-mask-position: center;
+            -webkit-mask-repeat: no-repeat;
+            -webkit-mask-size: var(--mask-size);
+            mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 300'%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-family='Arial, sans-serif' font-weight='900' font-size='220' letter-spacing='10' fill='black'%3EVALERIA%3C/text%3E%3C/svg%3E");
+            mask-position: center;
+            mask-repeat: no-repeat;
+            mask-size: var(--mask-size);
         }
 
         .tarjeta-magica {
@@ -136,7 +138,6 @@
             transform: translateY(-3px);
         }
 
-        /* Gota del cursor */
         .gota-espiritu {
             position: fixed;
             width: 5px; height: 5px;
@@ -153,18 +154,15 @@
 </head>
 <body>
 
-    <!-- CONTENEDOR MAESTRO (GSAP lo dejará fijo mientras hacemos scroll virtual) -->
     <div id="escenario-maestro">
         
-        <!-- Capa 1: Canvas (Video Scrubbing) -->
         <canvas id="canvas-anime"></canvas>
 
-        <!-- Capas Parallax (Se moverán a distintas velocidades) -->
         <div class="capa-parallax" id="hud-1">SYS.SYNC: ACTIVE</div>
         <div class="capa-parallax" id="hud-2">SPIRIT BOUNDARY // 001</div>
         <div id="texto-scroll">↓ INICIAR SINCRONIZACIÓN ↓</div>
 
-        <!-- Capa Máscara: Tarjeta (Aparecerá expandiéndose desde el centro) -->
+        <!-- MÁSCARA TIPOGRÁFICA -->
         <div id="contenedor-tarjeta">
             <div class="tarjeta-magica">
                 <h1>BIENVENIDA, <span>VALERIA</span></h1>
@@ -179,23 +177,22 @@
 
     </div>
 
-    <!-- AUDIO -->
+    <!-- AUDIO MP3 -->
     <audio id="audio-tema" src="musica.mp3"></audio>
 
     <script>
-        // 1. INICIALIZAR LENIS (SCROLL INERCIAL)
+        // LENIS (SCROLL INERCIAL)
         const lenis = new Lenis({
             duration: 1.2,
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
             smooth: true
         });
 
-        // Conectar Lenis con el Ticker de GSAP para que vayan en perfecta sincronía
         lenis.on('scroll', ScrollTrigger.update);
         gsap.ticker.add((time) => { lenis.raf(time * 1000) });
         gsap.ticker.lagSmoothing(0);
 
-        // 2. MAGIA DEL RATÓN
+        // CURSOR
         document.addEventListener('mousemove', (e) => {
             const gota = document.createElement('div');
             gota.className = 'gota-espiritu';
@@ -205,12 +202,14 @@
             setTimeout(() => gota.remove(), 1000);
         });
 
-        // 3. REGISTRAR GSAP Y CONFIGURAR CANVAS
+        // GSAP + CANVAS
         gsap.registerPlugin(ScrollTrigger);
 
         const canvas = document.getElementById("canvas-anime");
         const context = canvas.getContext("2d");
-        const totalFotogramas = 26; // Tu número de imágenes
+        
+        // ¡RECUERDA TU NÚMERO DE FOTOS!
+        const totalFotogramas = 26; 
 
         const rutaImagen = index => {
             const num = index.toString().padStart(2, '0'); 
@@ -224,7 +223,6 @@
             imagenes.push(img);
         }
 
-        // Variable objeto para que GSAP pueda animarla numéricamente
         const animeTracker = { frame: 0 };
 
         imagenes[0].onload = () => {
@@ -233,47 +231,49 @@
             context.drawImage(imagenes[0], 0, 0);
         };
 
-        // Función para renderizar el fotograma actual en el canvas
         function render() {
             if (imagenes[animeTracker.frame]) {
                 context.drawImage(imagenes[animeTracker.frame], 0, 0);
             }
         }
 
-        // 4. CREAR LA LÍNEA DE TIEMPO MAESTRA (TIMELINE GSAP)
+        // LÍNEA DE TIEMPO MAESTRA GSAP
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: "#escenario-maestro",
                 start: "top top",
-                end: "+=400%", // Obliga al usuario a hacer scroll equivalente a 4 pantallas
-                pin: true,     // Fija el escenario principal
-                scrub: 1.5,    // EL SECRETO: 1.5 segundos de inercia extra tras parar de scrollear
+                end: "+=400%", 
+                pin: true,     
+                scrub: 1.5,    
             }
         });
 
-        // A. Animación del Video (Scrubbing)
+        // Animación Video Scrubbing
         tl.to(animeTracker, {
             frame: totalFotogramas - 1,
-            snap: "frame",     // Obliga a que sean números enteros (0, 1, 2...)
+            snap: "frame",     
             ease: "none",
-            onUpdate: render   // Cada vez que el frame cambia, repinta el canvas
-        }, 0); // El ", 0" al final significa que empieza al inicio del scroll
+            onUpdate: render   
+        }, 0); 
 
-        // B. Ocultar el texto de inicio rápidamente
+        // Ocultar texto scroll
         tl.to("#texto-scroll", { opacity: 0, duration: 0.1 }, 0);
 
-        // C. Parallax por capas (HUDs) - Se mueven a ritmos distintos
+        // Capas Parallax HUD
         tl.to("#hud-1", { y: -200, opacity: 0, ease: "none" }, 0);
         tl.to("#hud-2", { y: 300, x: 100, opacity: 0, scale: 1.5, ease: "none" }, 0);
 
-        // D. Enmascaramiento (Masking) de la tarjeta final
-        // Aparece en la segunda mitad de la animación
-        tl.to("#contenedor-tarjeta", {
-            clipPath: "circle(150% at 50% 50%)", // Expande el círculo hasta cubrir todo
-            ease: "power2.inOut",
-        }, 0.4); // Empieza cuando el scroll va por el 40%
+        // ENMASCARAMIENTO DE LETRAS (TYPOGRAPHIC MASKING)
+        tl.fromTo("#contenedor-tarjeta", 
+            { "--mask-size": "0vw" },
+            { 
+                "--mask-size": "5000vw", 
+                ease: "power3.in" // Aceleración exponencial para simular "entrar" en la letra E
+            }, 
+            0.4
+        );
 
-        // 5. AUDIO LIMPIO
+        // AUDIO
         const btnActivar = document.getElementById('btn-activar');
         const reproductorAudio = document.getElementById('audio-tema');
 
