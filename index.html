@@ -4,359 +4,509 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- SEGURIDAD: Modo sigilo ninja activado -->
     <meta name="robots" content="noindex, nofollow">
     
-    <title>🌟 ¡El Mundo de Valeria! 🌟</title>
+    <title>⚡ VALERIA // DIGITAL_ID_2026 ⚡</title>
     
-    <!-- Fuentes: Mochiy Pop One (Súper Anime/Kawaii) y Quicksand (Lectura clara) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
         /* ==========================================
-           PALETA MANGA POP / NEO-BRUTALISMO
+           VARIABLES & PALETA CYBER-VAPOR 2026
            ========================================== */
         :root {
-            --fondo-vibrante: #ffe600; 
-            --rosa-anime: #ff007b;
-            --cian-magico: #00e5ff;
-            --morado-oscuro: #2d00f7;
-            --verde-toxico: #39ff14;
-            --linea-comic: #1a1a1a; 
-            --blanco-papel: #ffffff;
+            --bg-dark: #050509;
+            --neon-pink: #ff007b;
+            --neon-cyan: #00e5ff;
+            --neon-purple: #7a04eb;
+            --neon-lime: #39ff14;
+            --text-main: #ffffff;
+            --text-dark: #1a1a1a;
+            --font-tech: 'Roboto Mono', monospace;
+            --font-pop: 'Bungee', sans-serif;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            /* Cursor de estrellita brillante */
-            cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><text y='20' font-size='20'>✨</text></svg>"), auto;
+            /* Ocultamos el cursor por defecto para usar el personalizado */
+            cursor: none; 
         }
 
-        /* FONDO ESTILO TRAMA DE MANGA */
         body {
-            font-family: 'Quicksand', sans-serif;
-            color: var(--linea-comic);
-            background-color: var(--fondo-vibrante);
-            background-image: radial-gradient(var(--linea-comic) 1.5px, transparent 1.5px);
-            background-size: 30px 30px;
+            font-family: var(--font-tech);
+            color: var(--text-main);
+            background-color: var(--bg-dark);
             min-height: 100vh;
-            padding: 0 0 40px 0; /* Ajustado para la marquesina */
             overflow-x: hidden;
+            perspective: 1000px; /* Necesario para efectos 3D */
+            padding: 20px;
         }
 
         /* ==========================================
-           NUEVO: MARQUESINA ANIMADA
+           NUEVO: FONDO ANIMADO NEÓN
            ========================================== */
-        .marquesina {
-            background: var(--linea-comic);
-            color: var(--verde-toxico);
-            font-family: 'Mochiy Pop One', sans-serif;
-            padding: 10px 0;
-            white-space: nowrap;
-            overflow: hidden;
-            border-bottom: 4px solid var(--linea-comic);
-            margin-bottom: 30px;
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            /* Degradado animado */
+            background: linear-gradient(125deg, #050509, #2d00f7, #050509, #ff007b, #050509);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            z-index: -2;
         }
 
-        .marquesina p {
-            display: inline-block;
-            animation: scrollTexto 15s linear infinite;
-            margin: 0;
-            font-size: 1.2rem;
-            letter-spacing: 2px;
+        /* Trama de líneas Cyberpunk encima */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(0deg, transparent 24%, rgba(0, 229, 255, 0.05) 25%, rgba(0, 229, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 229, 255, 0.05) 75%, rgba(0, 229, 255, 0.05) 76%, transparent 77%, transparent),
+                linear-gradient(90deg, transparent 24%, rgba(0, 229, 255, 0.05) 25%, rgba(0, 229, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 229, 255, 0.05) 75%, rgba(0, 229, 255, 0.05) 76%, transparent 77%, transparent);
+            background-size: 50px 50px;
+            z-index: -1;
         }
 
-        @keyframes scrollTexto {
-            0% { transform: translateX(100vw); }
-            100% { transform: translateX(-100%); }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         /* ==========================================
-           CONTENEDOR Y GRID
+           NUEVO: CURSOR CUSTOM (ESTELA VISIBLE)
+           ========================================== */
+        #cursor-puntero {
+            width: 20px;
+            height: 20px;
+            background: #000; /* Negro para que se distinga */
+            border: 2px solid var(--text-main);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none; /* No interfiere con los clics */
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: difference; /* Efecto invertido para máx visibilidad */
+        }
+
+        .particula-estela {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            animation: desvanecerParticula 0.8s ease-out forwards;
+        }
+
+        @keyframes desvanecerParticula {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -100px) scale(0); opacity: 0; }
+        }
+
+        /* ==========================================
+           CONTENEDOR Y GRID (Perspectiva activada)
            ========================================== */
         .escenario {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            padding: 0 20px;
+            gap: 40px;
+            padding-top: 50px;
+            transform-style: preserve-3d;
         }
 
         /* ==========================================
-           ANIMACIÓN DE ENTRADA (EFECTO POP!)
+           HEADER CON EFECTO GLITCH
            ========================================== */
-        @keyframes popIn {
-            0% { opacity: 0; transform: scale(0.8) translateY(50px); }
-            70% { transform: scale(1.05); }
-            100% { opacity: 1; transform: scale(1) translateY(0); }
-        }
-
-        /* ==========================================
-           TARJETAS ESTILO CÓMIC
-           ========================================== */
-        .tarjeta-comic {
-            background-color: var(--blanco-papel);
-            border: 5px solid var(--linea-comic);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 10px 10px 0px var(--linea-comic);
-            transition: all 0.2s ease-in-out;
-            position: relative;
-            /* Aplicamos la animación de entrada */
-            opacity: 0; 
-            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-
-        /* Retrasos para que aparezcan una tras otra */
-        .tarjeta-comic:nth-child(2) { animation-delay: 0.2s; }
-        .tarjeta-comic:nth-child(3) { animation-delay: 0.4s; }
-        .tarjeta-comic:nth-child(4) { animation-delay: 0.6s; }
-
-        .tarjeta-comic:hover {
-            transform: translate(-5px, -5px) scale(1.02) !important;
-            box-shadow: 15px 15px 0px var(--rosa-anime);
-            border-color: var(--rosa-anime);
-            z-index: 10;
-        }
-
-        .borde-cian:hover { box-shadow: 15px 15px 0px var(--cian-magico); border-color: var(--cian-magico); }
-        .borde-morado:hover { box-shadow: 15px 15px 0px var(--morado-oscuro); border-color: var(--morado-oscuro); }
-
         .header-titulo {
             grid-column: 1 / -1;
             text-align: center;
-            background: var(--cian-magico);
-            border: 5px solid var(--linea-comic);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 10px 10px 0px var(--linea-comic);
-            transform: rotate(-2deg);
-            margin-bottom: 20px;
-            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-
-        /* Avatar de perfil */
-        .avatar-contenedor {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .avatar {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            border: 4px solid var(--linea-comic);
-            box-shadow: 5px 5px 0px var(--morado-oscuro);
-            background: var(--fondo-vibrante);
-            /* Animación de latido */
-            animation: latido 2s infinite;
-        }
-
-        @keyframes latido {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            margin-bottom: 30px;
+            position: relative;
         }
 
         h1 {
-            font-family: 'Mochiy Pop One', sans-serif;
-            font-size: clamp(2rem, 5vw, 3.5rem); /* Responsive */
-            color: var(--blanco-papel);
-            text-shadow: 4px 4px 0px var(--linea-comic);
-            letter-spacing: 2px;
+            font-family: var(--font-pop);
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            color: var(--text-main);
             text-transform: uppercase;
+            letter-spacing: -2px;
+            line-height: 0.9;
+            position: relative;
+            /* Efecto glitch permanente pero suave */
+            text-shadow: 
+                3px 0 var(--neon-pink), 
+                -3px 0 var(--neon-cyan);
+            animation: glitchSuave 2s infinite;
         }
 
+        /* Subtítulo estilo consola */
         .subtitulo {
-            background: var(--blanco-papel);
+            font-family: var(--font-tech);
+            background: var(--neon-cyan);
+            color: var(--text-dark);
             display: inline-block;
             padding: 5px 15px;
-            border: 3px solid var(--linea-comic);
-            border-radius: 20px;
             font-weight: 700;
-            margin-top: 10px;
-            transform: rotate(2deg);
+            margin-top: 15px;
+            text-transform: uppercase;
+            box-shadow: 5px 5px 0 var(--text-main);
+        }
+
+        @keyframes glitchSuave {
+            0% { text-shadow: 3px 0 var(--neon-pink), -3px 0 var(--neon-cyan); }
+            50% { text-shadow: -3px 0 var(--neon-pink), 3px 0 var(--neon-cyan); }
+            100% { text-shadow: 3px 0 var(--neon-pink), -3px 0 var(--neon-cyan); }
+        }
+
+        /* ==========================================
+           TARJETAS 3D INTERACTIVAS
+           ========================================== */
+        .tarjeta-cyber {
+            background: rgba(255, 255, 255, 0.03); /* Cristal esmerilado */
+            border: 2px solid var(--text-main);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            position: relative;
+            transition: transform 0.1s ease-out, box-shadow 0.2s ease;
+            transform-style: preserve-3d; /* Permite elementos 3D dentro */
+            overflow: hidden;
+            
+            /* Animación de entrada */
+            opacity: 0;
+            animation: entradaCyber 0.5s ease-out forwards;
+        }
+
+        /* Bordes neón que parpadean */
+        .tarjeta-cyber::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            box-shadow: inset 0 0 20px rgba(0, 229, 255, 0.3);
+            pointer-events: none;
+            animation: parpadeoNeon 4s infinite;
+        }
+
+        /* Retrasos de entrada */
+        .tarjeta-cyber:nth-child(2) { animation-delay: 0.1s; }
+        .tarjeta-cyber:nth-child(3) { animation-delay: 0.2s; }
+        .tarjeta-cyber:nth-child(4) { animation-delay: 0.3s; }
+
+        @keyframes entradaCyber {
+            0% { opacity: 0; transform: translateY(50px) rotateX(15deg); }
+            100% { opacity: 1; transform: translateY(0) rotateX(0deg); }
+        }
+
+        @keyframes parpadeoNeon {
+            0%, 100% { box-shadow: inset 0 0 20px rgba(0, 229, 255, 0.3); border-color: var(--text-main); }
+            50% { box-shadow: inset 0 0 30px rgba(255, 0, 123, 0.5); border-color: var(--neon-pink); }
+            51% { box-shadow: inset 0 0 10px rgba(255, 0, 123, 0.2); border-color: var(--text-main); }
+            52% { box-shadow: inset 0 0 30px rgba(255, 0, 123, 0.5); border-color: var(--neon-pink); }
+        }
+
+        /* Efecto Hover 3D (se aplica via JS) */
+        .tarjeta-cyber:hover {
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.5);
+            z-index: 10;
+        }
+
+        /* Elementos que flotan "fuera" de la tarjeta en 3D */
+        .p-3d {
+            transform: translateZ(30px); /* Flota por encima */
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px var(--neon-cyan);
         }
 
         h2 {
-            font-family: 'Mochiy Pop One', sans-serif;
-            font-size: 1.5rem;
-            color: var(--linea-comic);
-            margin-bottom: 20px;
+            font-family: var(--font-pop);
+            font-size: 1.6rem;
+            color: var(--text-main);
+            margin-bottom: 25px;
             text-transform: uppercase;
-            border-bottom: 4px dashed var(--linea-comic);
-            padding-bottom: 10px;
+            border-bottom: 3px solid var(--neon-pink);
+            display: inline-block;
+            padding-bottom: 5px;
+            transform: translateZ(20px);
         }
 
-        p { font-size: 1.15rem; line-height: 1.6; margin-bottom: 15px; font-weight: 600; }
-
-        .skills { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; }
-
-        .tag-skill {
-            background: var(--fondo-vibrante);
-            border: 3px solid var(--linea-comic);
-            padding: 8px 15px;
-            border-radius: 25px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            box-shadow: 3px 3px 0px var(--linea-comic);
-            transition: transform 0.1s;
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            transform: translateZ(10px);
         }
 
-        .tag-skill:hover { transform: scale(1.1) rotate(5deg); background: var(--rosa-anime); color: white; }
-
-        .music-box {
+        /* SKILLS TAGS NEÓN */
+        .skills {
             display: flex;
-            flex-direction: column;
-            gap: 15px;
-            background: #f0f0f0;
-            border: 3px solid var(--linea-comic);
-            padding: 15px;
-            border-radius: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+            transform: translateZ(25px);
         }
 
-        /* Ocultar el reproductor por defecto y hacerlo bonito */
+        .tag-cyber {
+            background: transparent;
+            border: 2px solid var(--neon-lime);
+            color: var(--neon-lime);
+            padding: 8px 15px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .tag-cyber:hover {
+            background: var(--neon-lime);
+            color: var(--text-dark);
+            box-shadow: 0 0 15px var(--neon-lime);
+            transform: scale(1.05) rotate(-3deg);
+        }
+
+        /* REPRODUCTOR DE MÚSICA FUTURISTA */
+        .music-box-cyber {
+            border: 2px solid var(--neon-pink);
+            padding: 20px;
+            background: rgba(255, 0, 123, 0.05);
+            margin-top: 20px;
+            transform: translateZ(20px);
+        }
+
         audio {
             width: 100%;
-            border-radius: 30px;
+            height: 35px;
+            margin-top: 15px;
+            filter: invert(1); /* Hace el reproductor negro/blanco */
         }
 
-        footer {
+        /* BOTONES PROYECTOS */
+        .btn-cyber-pro {
+            display: block;
+            width: 100%;
+            background: transparent;
+            border: 2px solid var(--text-main);
+            color: var(--text-main);
+            padding: 15px;
+            font-family: var(--font-pop);
+            text-transform: uppercase;
+            font-size: 1.1rem;
+            text-decoration: none;
             text-align: center;
-            margin-top: 50px;
-            font-weight: 700;
-            background: var(--blanco-papel);
-            border: 4px solid var(--linea-comic);
-            display: inline-block;
-            padding: 10px 20px;
-            border-radius: 20px;
-            box-shadow: 5px 5px 0px var(--linea-comic);
-            position: relative;
-            left: 50%;
-            transform: translateX(-50%);
+            margin-top: 15px;
             transition: all 0.3s;
+            position: relative;
         }
 
-        footer:hover { background: var(--rosa-anime); color: white; transform: translateX(-50%) scale(1.1); }
+        .btn-cyber-pro:hover {
+            background: var(--text-main);
+            color: var(--text-dark);
+            box-shadow: 0 0 20px var(--text-main);
+            transform: scale(1.02) translateZ(10px);
+        }
 
-        /* Efectos flotantes JS */
-        .chispa {
+        /* FOOTER */
+        footer {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin-top: 60px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            position: relative;
+        }
+
+        footer strong { color: var(--neon-pink); }
+
+        /* Efecto explosión clic (JS) */
+        .onda-clic {
             position: fixed;
+            border: 2px solid var(--text-main);
+            border-radius: 50%;
             pointer-events: none;
-            font-size: 1.5rem;
-            animation: flotar 1s ease-out forwards;
-            z-index: 9999;
+            z-index: 9998;
+            animation: extenderOnda 0.5s ease-out forwards;
         }
 
-        @keyframes flotar {
-            0% { transform: translateY(0) scale(1); opacity: 1; }
-            100% { transform: translateY(-100px) scale(0.5); opacity: 0; }
+        @keyframes extenderOnda {
+            0% { width: 0; height: 0; opacity: 1; transform: translate(-50%, -50%); }
+            100% { width: 200px; height: 200px; opacity: 0; transform: translate(-50%, -50%); }
         }
+
     </style>
 </head>
 <body>
 
-    <!-- MARQUESINA -->
-    <div class="marquesina">
-        <p>⚡ CURRENT STATUS: CODING ⚡ LEVEL 14 UNLOCKED ⚡ DO NOT DISTURB ⚡ POWER LEVEL OVER 9000 ⚡</p>
-    </div>
+    <div id="cursor-puntero"></div>
 
     <div class="escenario">
         
-        <!-- HEADER PRINCIPAL -->
         <header class="header-titulo">
-            <h1>¡El Mundo de Valeria!</h1>
-            <div class="subtitulo">⚠️ Zona VIP: Prohibido adultos (Salvo mi tía, que es de mi gremio ⚔️)</div>
+            <h1>VALERIA</h1>
+            <div class="subtitulo">📡 STATUS: ONLINE // ID: 21122009_V // CLAN: TÍA_GEEK</div>
         </header>
 
-        <!-- TARJETA 1: PERFIL (Morada) -->
-        <article class="tarjeta-comic borde-morado">
-            <!-- AVATAR (Puedes cambiar la URL por una foto suya o un GIF) -->
-            <div class="avatar-contenedor">
-                <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Valeria&backgroundColor=ff007b" alt="Avatar de Valeria" class="avatar">
-            </div>
-            <h2>⭐ Ficha de Personaje</h2>
-            <p><strong>Nivel actual:</strong> 14 años.</p>
-            <p><strong>Clase:</strong> Creadora / Estudiante.</p>
-            <p>¡Hola! Este es mi cuartel general. Me encanta la cultura pop, la buena comida y reírme demasiado fuerte.</p>
+        <article class="tarjeta-cyber" style="grid-column: span 1;">
+            <h2>👤 PROFILE_DATA</h2>
+            <p class="p-3d">>> Categoria: <strong style="color: var(--text-main)">HUMANO_GEN_ALPHA</strong></p>
+            <p class="p-3d">>> EXP_Level: <strong style="color: var(--text-main)">14_AÑOS</strong></p>
+            <p>Conectada al cuartel general. Amante del arte digital, la cultura pop y los memes de alta calidad. Nivel de energía: Máximo.</p>
             
             <div class="skills">
-                <span class="tag-skill">💥 Energía infinita</span>
-                <span class="tag-skill">🎨 Dibujo Digital</span>
-                <span class="tag-skill">🎮 Pro Gamer</span>
+                <span class="tag-cyber">🎨 Digital Art</span>
+                <span class="tag-cyber">👾 Gaming Pro</span>
+                <span class="tag-cyber">🚀 K-Pop Stan</span>
+                <span class="tag-cyber">💥 Energía Inf.</span>
             </div>
         </article>
 
-        <!-- TARJETA 2: MÚSICA (Rosa) -->
-        <article class="tarjeta-comic">
-            <h2>🎧 Opening Actual</h2>
-            <p>La banda sonora de mi vida. Dale al play para activar el modo épico:</p>
+        <article class="tarjeta-cyber">
+            <h2>🎧 AUDIO_HYPE</h2>
+            <p class="p-3d">Opening actual. Activa para modo Dios:</p>
             
-            <div class="music-box">
-                <div style="display: flex; align-items: center; gap: 15px;">
-                    <div style="font-size: 2.5rem;">🎶</div>
-                    <div>
-                        <p style="margin-bottom: 0; font-size: 1.2rem; font-family: 'Mochiy Pop One', sans-serif;">Pista Actual</p>
-                        <p style="margin-bottom: 0; color: #666; font-size: 0.9rem;">Elige tu canción favorita</p>
-                    </div>
-                </div>
-                <!-- REPRODUCTOR DE AUDIO REAL -->
-                <!-- Tía: Solo tienes que poner la URL de un .mp3 donde dice src="" -->
+            <div class="music-box-cyber">
+                <p style="margin: 0; font-family: var(--font-pop); color: var(--neon-pink);">Now Playing_</p>
+                <p style="margin: 0; font-size: 0.9rem;">Canción_Favorita.mp3</p>
+                
                 <audio controls src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
             </div>
         </article>
 
-        <!-- TARJETA 3: PROYECTOS (Cian) -->
-        <article class="tarjeta-comic borde-cian" style="grid-column: 1 / -1;">
-            <h2>🔥 Arcos de Entrenamiento (Proyectos)</h2>
-            <p>Las misiones épicas que estoy completando en el colegio y en la vida:</p>
+        <article class="tarjeta-cyber" style="grid-column: 1 / -1;">
+            <h2>🔥 CURRENT_MISSIONS (Arcos)</h2>
+            <p class="p-3d">Misiones críticas actualmente en ejecución en el servidor local (colegio y vida):</p>
             
-            <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px;">
-                <div style="flex: 1; min-width: 250px; background: #f0f0f0; border: 3px solid var(--linea-comic); padding: 15px; border-radius: 10px; transition: transform 0.2s;">
-                    <h3 style="font-family: 'Mochiy Pop One', sans-serif; margin-bottom: 10px;">🧪 Misión: Ciencias</h3>
-                    <p style="font-size: 1rem;">Sobreviví al experimento del volcán con éxito.</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 20px;">
+                <div style="border: 2px solid var(--neon-cyan); padding: 15px; background: rgba(0, 229, 255, 0.05);">
+                    <h3 style="font-family: var(--font-pop); color: var(--neon-cyan); margin-bottom: 5px;">Misión Sci-Tech</h3>
+                    <p style="font-size: 0.9rem; margin-bottom: 0;">Superado experimento 'Volcán' sin daños colaterales.</p>
                 </div>
-                <div style="flex: 1; min-width: 250px; background: #f0f0f0; border: 3px solid var(--linea-comic); padding: 15px; border-radius: 10px; transition: transform 0.2s;">
-                    <h3 style="font-family: 'Mochiy Pop One', sans-serif; margin-bottom: 10px;">💻 Misión: Código</h3>
-                    <p style="font-size: 1rem;">Hackeando la matrix paso a paso.</p>
+                <div style="border: 2px solid var(--neon-cyan); padding: 15px; background: rgba(0, 229, 255, 0.05);">
+                    <h3 style="font-family: var(--font-pop); color: var(--neon-cyan); margin-bottom: 5px;">Misión Code_Zero</h3>
+                    <p style="font-size: 0.9rem; margin-bottom: 0;">Hackeando mi propia realidad con código HTML.</p>
                 </div>
             </div>
+            
+            <a href="#" class="btn-cyber-pro">Ver registro de misiones completadas >></a>
         </article>
+
+        <footer>
+            DIGITAL_ID construida con magia y Cyber-Tech 2026 por <strong>VALERIA</strong> y su <strong>TÍA_GEEK</strong>. <br> System_Status: STABLE.
+        </footer>
 
     </div>
 
-    <footer>
-        Construido con magia ✨ por Valeria y su Tía 
-    </footer>
-
-    <!-- SCRIPT DE MAGIA PARA HACER CLIC -->
     <script>
-        const emojis = ['⭐', '✨', '💖', '🔥', '👾'];
-        
-        document.body.addEventListener('click', function(e) {
-            const chispa = document.createElement('div');
-            chispa.className = 'chispa';
-            // Elegir emoji aleatorio
-            chispa.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+        // 1. LÓGICA DEL CURSOR CUSTOM Y ESTELA
+        const puntero = document.getElementById('cursor-puntero');
+        const coloresEstela = ['#ff007b', '#00e5ff', '#39ff14', '#ffffff'];
+
+        document.addEventListener('mousemove', (e) => {
+            // Mover el puntero principal
+            puntero.style.left = e.clientX + 'px';
+            puntero.style.top = e.clientY + 'px';
+
+            // Crear partícula de estela
+            crearParticula(e.clientX, e.clientY);
+        });
+
+        function crearParticula(x, y) {
+            const particula = document.createElement('div');
+            particula.className = 'particula-estela';
             
-            // Posicionar donde se hizo clic
-            chispa.style.left = e.clientX + 'px';
-            chispa.style.top = e.clientY + 'px';
+            // Tamaño aleatorio
+            const tamano = Math.random() * 8 + 2;
+            particula.style.width = tamano + 'px';
+            particula.style.height = tamano + 'px';
             
-            // Variación aleatoria en la animación
-            chispa.style.transform = `rotate(${Math.random() * 360}deg)`;
+            // Color aleatorio de la paleta
+            particula.style.background = coloresEstela[Math.floor(Math.random() * coloresEstela.length)];
             
-            document.body.appendChild(chispa);
+            particula.style.left = x + 'px';
+            particula.style.top = y + 'px';
             
-            // Eliminar elemento después de la animación
+            document.body.appendChild(particula);
+            
+            // Eliminar después de la animación
             setTimeout(() => {
-                chispa.remove();
-            }, 1000);
+                particula.remove();
+            }, 800);
+        }
+
+        // 2. LÓGICA TILT 3D EN LAS TARJETAS
+        const tarjetas = document.querySelectorAll('.tarjeta-cyber');
+
+        tarjetas.forEach(tarjeta => {
+            tarjeta.addEventListener('mousemove', (e) => {
+                const rect = tarjeta.getBoundingClientRect();
+                const x = e.clientX - rect.left; // posición X dentro de la tarjeta
+                const y = e.clientY - rect.top;  // posición Y dentro de la tarjeta
+                
+                // Calcular el centro de la tarjeta
+                const centroX = rect.width / 2;
+                const centroY = rect.height / 2;
+                
+                // Calcular la rotación (máximo 15 grados)
+                const rotacionX = ((y - centroY) / centroY) * -15; 
+                const rotacionY = ((x - centroX) / centroX) * 15;
+                
+                // Aplicar la transformación 3D
+                tarjeta.style.transform = `rotateX(${rotacionX}deg) rotateY(${rotacionY}deg) translateZ(10px)`;
+            });
+            
+            // Resetear al salir el ratón
+            tarjeta.addEventListener('mouseleave', () => {
+                tarjeta.style.transform = `rotateX(0deg) rotateY(0deg) translateZ(0px)`;
+            });
+        });
+
+        // 3. LÓGICA DE EXPLOSIÓN AL HACER CLIC
+        const emojisClic = ['⚡', '👾', '🔥', '💖', '⭐', '✨'];
+
+        document.addEventListener('click', (e) => {
+            // Onda expansiva
+            const onda = document.createElement('div');
+            onda.className = 'onda-clic';
+            onda.style.left = e.clientX + 'px';
+            onda.style.top = e.clientY + 'px';
+            // Color aleatorio onda
+            onda.style.borderColor = coloresEstela[Math.floor(Math.random() * coloresEstela.length)];
+            document.body.appendChild(onda);
+
+            // Explosión de emojis (5 emojis)
+            for(let i=0; i<5; i++) {
+                const emoji = document.createElement('div');
+                emoji.className = 'particula-estela'; // Reutilizamos clase para animar
+                emoji.innerText = emojisClic[Math.floor(Math.random() * emojisClic.length)];
+                emoji.style.fontSize = '1.5rem';
+                emoji.style.left = e.clientX + 'px';
+                emoji.style.top = e.clientY + 'px';
+                
+                // Dirección aleatoria
+                emoji.style.animation = 'none'; // Quitamos la de desvanecer por defecto
+                emoji.style.transition = 'all 0.6s ease-out';
+                
+                document.body.appendChild(emoji);
+
+                // Forzar reflujo para que la transición funcione
+                emoji.offsetHeight;
+
+                // Mover aleatoriamente
+                const mX = (Math.random() - 0.5) * 200;
+                const mY = (Math.random() - 0.5) * 200;
+                emoji.style.transform = `translate(${mX}px, ${mY}px) scale(0) rotate(${Math.random()*360}deg)`;
+                emoji.style.opacity = '0';
+
+                setTimeout(() => emoji.remove(), 600);
+            }
+
+            setTimeout(() => onda.remove(), 500);
         });
     </script>
 
