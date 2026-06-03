@@ -81,18 +81,24 @@
             50% { opacity: 1; }
         }
 
-        /* ==========================================
-           TARJETA ENMASCARADA (TYPOGRAPHIC MASKING)
-           ========================================== */
-        #contenedor-tarjeta {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-            background: rgba(10, 10, 18, 0.85);
+       // ENMASCARAMIENTO DE LETRAS (Efecto "Llegar de detrás" / Revelado Cinematográfico)
+tl.fromTo("#contenedor-tarjeta", 
+    { 
+        opacity: 0, 
+        y: 50, // Empieza 50px por debajo, "escondido"
+        scale: 1.05 // Un zoom muy sutil para dar sensación de profundidad
+    }, 
+    { 
+        opacity: 1, 
+        y: 0, // Llega a su posición final
+        scale: 1, // Vuelve a su tamaño real
+        duration: 2, 
+        ease: "power2.out" 
+    }, 
+    0.5 // Comienza en el 50% del scroll
+);
+        backdrop-filter: blur(15px); /* Desenfoque del fondo al revelar */
+}
             
             /* Aquí inyectamos el SVG con la palabra VALERIA como máscara */
             --mask-size: 0vw;
