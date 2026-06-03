@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>⚡ VALERIA // MUNDO ESPIRITUAL ⚡</title>
-    <!-- Fuentes elegantes -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --sangre: #c41e3a;
             --nieve: #f0f8ff;
-            --noche: #1a1a2e;
+            --noche: #0a0a12;
             --oro: #ffd700;
         }
 
@@ -17,167 +16,176 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            cursor: none; /* Ocultamos cursor normal */
+            cursor: none; 
         }
 
         body {
             background-color: var(--noche);
             color: var(--nieve);
             font-family: 'Quicksand', sans-serif;
-            background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
             overflow-x: hidden;
         }
 
-        /* Efecto de partículas de sangre/espíritu al mover el cursor */
+        /* ==========================================
+           FONDO CINEMATOGRÁFICO PANTALLA COMPLETA
+           (ESTILO ROCKSTAR GAMES)
+           ========================================== */
+        #fondo-cinematico {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1; /* Se queda detrás de todo */
+            background-color: #000;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            /* ESTA ES LA CLAVE: Hace que la imagen llene la pantalla sin deformarse */
+            object-fit: cover; 
+            /* Oscurecemos un 30% la imagen para que las letras se lean perfecto */
+            filter: brightness(0.7); 
+        }
+
+        /* Indicador de Scroll superpuesto */
+        .scroll-indicador {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Cinzel', serif;
+            color: rgba(255, 255, 255, 0.8);
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            animation: latido 2s infinite;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        @keyframes latido {
+            0%, 100% { opacity: 0.3; transform: translate(-50%, 0); }
+            50% { opacity: 1; transform: translate(-50%, 10px); }
+        }
+
+        /* ==========================================
+           CONTENEDOR DE SCROLL Y TARJETA
+           ========================================== */
+        #zona-scroll {
+            height: 350vh; /* Altura para controlar la duración de la animación */
+            position: relative;
+        }
+
+        /* La tarjeta aparece al final del scroll */
+        #contenido-final {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            /* Fondo con degradado oscuro para que la tarjeta destaque sobre el Canvas */
+            background: linear-gradient(to bottom, transparent, var(--noche) 80%);
+        }
+
+        .tarjeta-magica {
+            background: rgba(10, 10, 18, 0.7);
+            border: 1px solid rgba(196, 30, 58, 0.5);
+            padding: 50px;
+            text-align: center;
+            backdrop-filter: blur(15px); /* Efecto cristal premium */
+            border-radius: 4px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 { 
+            font-family: 'Cinzel', serif; 
+            color: var(--nieve); 
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            letter-spacing: 3px;
+        }
+
+        h1 span {
+            color: var(--sangre);
+        }
+
+        .btn-magico {
+            background: transparent;
+            border: 1px solid var(--nieve);
+            color: var(--nieve);
+            padding: 15px 40px;
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            margin-top: 30px;
+            transition: all 0.4s ease;
+            text-transform: uppercase;
+        }
+
+        .btn-magico:hover {
+            background: var(--nieve);
+            color: var(--noche);
+            box-shadow: 0 0 30px rgba(255,255,255,0.3);
+            transform: translateY(-3px);
+        }
+
+        /* Gota espiritual del cursor */
         .gota-espiritu {
             position: fixed;
-            width: 8px;
-            height: 8px;
+            width: 5px;
+            height: 5px;
             background: var(--sangre);
             border-radius: 50%;
             pointer-events: none;
             animation: caer 1s forwards;
             z-index: 9999;
+            box-shadow: 0 0 10px var(--sangre);
         }
 
         @keyframes caer {
-            to { transform: translateY(50px) scale(0); opacity: 0; }
-        }
-
-        /* ==========================================
-           SECCIÓN 1: LA ANIMACIÓN MÁGICA CON SCROLL
-           ========================================== */
-        #contenedor-animacion {
-            /* Hacemos que esta sección sea muy alta para obligar a hacer scroll */
-            height: 400vh; 
-            position: relative;
-        }
-
-        .canvas-sticky {
-            position: sticky;
-            top: 0;
-            height: 100vh;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            background-color: #000; /* Fondo negro para que resalte la animación */
-        }
-
-        canvas {
-            max-width: 100%;
-            max-height: 100vh;
-            object-fit: contain;
-        }
-
-        .scroll-indicador {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-family: 'Cinzel', serif;
-            color: var(--nieve);
-            text-shadow: 0 0 10px var(--sangre);
-            animation: latido 2s infinite;
-            z-index: 10;
-        }
-
-        @keyframes latido {
-            0%, 100% { opacity: 0.5; transform: translate(-50%, 0); }
-            50% { opacity: 1; transform: translate(-50%, 10px); }
-        }
-
-        /* ==========================================
-           SECCIÓN 2: EL CONTENIDO DE LA WEB
-           ========================================== */
-        #contenido-web {
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 50px 20px;
-            position: relative;
-            background: linear-gradient(to bottom, transparent, var(--noche) 20%);
-        }
-
-        .tarjeta-magica {
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid var(--sangre);
-            padding: 40px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            clip-path: polygon(10% 0, 90% 0, 100% 10%, 100% 90%, 90% 100%, 10% 100%, 0 90%, 0 10%);
-            max-width: 600px;
-            width: 100%;
-            box-shadow: 0 0 30px rgba(196, 30, 58, 0.2);
-            position: relative;
-            z-index: 20;
-        }
-
-        h1 { 
-            font-family: 'Cinzel', serif; 
-            color: var(--sangre); 
-            text-shadow: 2px 2px var(--oro); 
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
-
-        .btn-magico {
-            background: transparent;
-            border: 2px solid var(--sangre);
-            color: var(--nieve);
-            padding: 15px 30px;
-            font-family: 'Cinzel', serif;
-            font-size: 1.2rem;
-            margin-top: 20px;
-            transition: all 0.3s;
-            clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
-        }
-
-        .btn-magico:hover {
-            background: var(--sangre);
-            box-shadow: 0 0 20px var(--sangre);
-            transform: scale(1.05);
-        }
-
-        /* Contenedor invisible para YouTube */
-        #reproductor-secreto {
-            display: none;
+            to { transform: translateY(30px) scale(0); opacity: 0; }
         }
     </style>
 </head>
 <body>
 
-    <!-- SECCIÓN DE LA ANIMACIÓN AL SCROLL -->
-    <section id="contenedor-animacion">
-        <div class="canvas-sticky">
-            <canvas id="canvas-anime"></canvas>
-            <div class="scroll-indicador">↓ Desliza hacia abajo ↓</div>
-        </div>
-    </section>
+    <!-- FONDO CINEMATOGRÁFICO FIJO (Estilo Rockstar) -->
+    <div id="fondo-cinematico">
+        <canvas id="canvas-anime"></canvas>
+    </div>
 
-    <!-- SECCIÓN DE CONTENIDO -->
-    <section id="contenido-web">
+    <!-- Indicador visual inicial -->
+    <div class="scroll-indicador" id="texto-scroll">↓ INICIAR SINCRONIZACIÓN ↓</div>
+
+    <!-- ZONA INVISIBLE PARA HACER SCROLL -->
+    <div id="zona-scroll"></div>
+
+    <!-- TARJETA FINAL -->
+    <div id="contenido-final">
         <div class="tarjeta-magica">
-            <h1>¡Bienvenida, Valeria!</h1>
-            <p style="margin-bottom: 20px; font-size: 1.2rem; line-height: 1.6;">
-                Has cruzado el límite. Tus estadísticas de poder se están cargando en el Mundo Espiritual.
+            <h1>BIENVENIDA, <span>VALERIA</span></h1>
+            <p style="margin-bottom: 20px; font-size: 1.1rem; line-height: 1.8; color: #ccc;">
+                Has cruzado el límite. Las estadísticas del Mundo Espiritual se han sincronizado correctamente.
             </p>
-            <p style="color: var(--oro);">Nivel de Sincronización: 100%</p>
+            <p style="color: var(--oro); font-size: 0.9rem; letter-spacing: 2px;">STATUS: 100% CONNECTED</p>
             
             <button class="btn-magico" id="btn-activar">
-                Activar Stats
+                Desbloquear Audio
             </button>
         </div>
-    </section>
+    </div>
 
-    <!-- Aquí inyectaremos la música cuando haga clic -->
-    <div id="reproductor-secreto"></div>
+    <!-- REPRODUCTOR DE AUDIO LIMPIO (Requiere que subas musica.mp3 a GitHub) -->
+    <audio id="audio-tema" src="musica.mp3"></audio>
 
     <script>
         /* ==========================================
-           MAGIA DEL RATÓN (Efecto Sangre/Espíritu)
+           MAGIA DEL RATÓN
            ========================================== */
         document.addEventListener('mousemove', (e) => {
             const gota = document.createElement('div');
@@ -189,14 +197,15 @@
         });
 
         /* ==========================================
-           MAGIA DEL SCROLL (ADAPTADA A TUS ARCHIVOS)
+           MAGIA DEL SCROLL (FULL SCREEN)
            ========================================== */
         const canvas = document.getElementById("canvas-anime");
         const context = canvas.getContext("2d");
+        const textoScroll = document.getElementById("texto-scroll");
 
+        // 🔥 NÚMERO DE FOTOGRAMAS (Asegúrate de que sea el correcto de tu carpeta)
         const totalFotogramas = 26; 
         
-        // Esta función ahora coincide exactamente con el nombre de tus archivos
         const rutaImagen = index => {
             const numeroConCeros = index.toString().padStart(2, '0'); 
             return `frames/frame_${numeroConCeros}_delay-0.09s.jpg`; 
@@ -210,6 +219,8 @@
         }
 
         imagenes[0].onload = () => {
+            // El canvas se ajusta a la resolución de la imagen original, 
+            // el CSS "object-fit: cover" se encarga de que llene la pantalla
             canvas.width = imagenes[0].width;
             canvas.height = imagenes[0].height;
             context.drawImage(imagenes[0], 0, 0);
@@ -217,9 +228,9 @@
 
         window.addEventListener('scroll', () => {
             const scrollTop = document.documentElement.scrollTop;
-            const maxScroll = document.getElementById("contenedor-animacion").scrollHeight - window.innerHeight;
+            const maxScroll = document.getElementById("zona-scroll").scrollHeight - window.innerHeight;
             
-            const fraccionScroll = scrollTop / maxScroll;
+            const fraccionScroll = Math.max(0, Math.min(1, scrollTop / maxScroll));
             
             const indexFotograma = Math.min(
                 totalFotogramas - 1,
@@ -231,23 +242,29 @@
                     context.drawImage(imagenes[indexFotograma], 0, 0);
                 }
             });
+
+            // Ocultar el texto de "Bajar" cuando ya ha empezado a bajar
+            if (scrollTop > 50) {
+                textoScroll.style.opacity = '0';
+            } else {
+                textoScroll.style.opacity = '1';
+            }
         });
 
         /* ==========================================
-           MAGIA DE LA MÚSICA (YOUTUBE DE FONDO)
+           AUDIO LIMPIO (SIN ANUNCIOS)
            ========================================== */
-        document.getElementById('btn-activar').addEventListener('click', function() {
-            // Inyectamos el iframe de YouTube con autoplay directamente
-            // El ID "t14NQJWyzLk" es el de tu enlace
-            const reproductor = document.getElementById('reproductor-secreto');
-            reproductor.innerHTML = '<iframe width="0" height="0" src="https://www.youtube.com/embed/t14NQJWyzLk?autoplay=1" frameborder="0" allow="autoplay"></iframe>';
-            
-            // Cambiamos el texto del botón para que sepa que ha funcionado
-            this.innerText = "¡Música Activada! 🌸";
-            this.style.background = "var(--sangre)";
-            this.style.boxShadow = "0 0 20px var(--sangre)";
-            
-            alert('Sistema inicializado. Escucha bien... el arco de entrenamiento acaba de comenzar.');
+        const btnActivar = document.getElementById('btn-activar');
+        const reproductorAudio = document.getElementById('audio-tema');
+
+        btnActivar.addEventListener('click', function() {
+            if(reproductorAudio.paused) {
+                reproductorAudio.play();
+                this.innerText = "Sincronización Completada 🌸";
+                this.style.background = "var(--nieve)";
+                this.style.color = "var(--noche)";
+                this.style.border = "1px solid var(--nieve)";
+            }
         });
     </script>
 </body>
