@@ -4,265 +4,279 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
+    <!-- SEGURIDAD: Modo sigilo ninja activado -->
     <meta name="robots" content="noindex, nofollow">
     
-    <title>☁️ El Mundo de Valeria ☁️</title>
+    <title>🌟 ¡El Mundo de Valeria! 🌟</title>
     
+    <!-- Fuentes: Mochiy Pop One (Súper Anime/Kawaii) y Quicksand (Lectura clara) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
 
     <style>
         /* ==========================================
-           PALETA AESTHETIC PASTEL
+           PALETA MANGA POP / NEO-BRUTALISMO
            ========================================== */
         :root {
-            --bg-1: #fbc2eb; /* Rosa pastel */
-            --bg-2: #a6c1ee; /* Azul cielo pastel */
-            --bg-3: #ffecd2; /* Melocotón suave */
-            --tarjeta-bg: rgba(255, 255, 255, 0.6);
-            --tarjeta-borde: rgba(255, 255, 255, 0.8);
-            --texto-principal: #594a4e;
-            --texto-titulos: #ff7eb3;
+            --fondo-vibrante: #ffe600; /* Amarillo eléctrico */
+            --rosa-anime: #ff007b;
+            --cian-magico: #00e5ff;
+            --morado-oscuro: #2d00f7;
+            --linea-comic: #1a1a1a; /* Borde negro grueso */
+            --blanco-papel: #ffffff;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            /* Cursor de flor de cerezo */
-            cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><text y='20' font-size='20'>🌸</text></svg>"), auto;
+            /* Cursor de estrellita brillante */
+            cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><text y='20' font-size='20'>✨</text></svg>"), auto;
         }
 
-        /* FONDO ANIMADO SUAVE (Estilo Nubes) */
+        /* FONDO ESTILO TRAMA DE MANGA (Puntos / Halftone) */
         body {
-            font-family: 'Nunito', sans-serif;
-            color: var(--texto-principal);
-            background: linear-gradient(120deg, var(--bg-1), var(--bg-2), var(--bg-3));
-            background-size: 200% 200%;
-            animation: nubes 12s ease-in-out infinite;
+            font-family: 'Quicksand', sans-serif;
+            color: var(--linea-comic);
+            background-color: var(--fondo-vibrante);
+            /* Patrón de puntos estilo cómic retro */
+            background-image: radial-gradient(var(--linea-comic) 1.5px, transparent 1.5px);
+            background-size: 30px 30px;
             min-height: 100vh;
             padding: 40px 20px;
-        }
-
-        @keyframes nubes {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            overflow-x: hidden;
         }
 
         /* ==========================================
-           CONTENEDOR ESTILO PINTEREST / BUBBLE
+           CONTENEDOR Y GRID
            ========================================== */
-        .tablero {
-            max-width: 900px;
+        .escenario {
+            max-width: 1000px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
         }
 
         /* ==========================================
-           TARJETAS DE CRISTAL BLANCO (Soft Glassmorphism)
+           TARJETAS ESTILO CÓMIC (Neo-Brutalism)
            ========================================== */
-        .tarjeta-bubble {
-            background: var(--tarjeta-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 2px solid var(--tarjeta-borde);
-            border-radius: 35px; /* Bordes súper redondeados */
-            padding: 35px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        .tarjeta-comic {
+            background-color: var(--blanco-papel);
+            border: 5px solid var(--linea-comic);
+            border-radius: 15px;
+            padding: 30px;
+            /* La sombra sólida es la clave de este estilo */
+            box-shadow: 10px 10px 0px var(--linea-comic);
+            transition: all 0.2s ease-in-out;
             position: relative;
         }
 
-        .tarjeta-bubble:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        /* EFECTO REBOTE EUFÓRICO AL PASAR EL RATÓN */
+        .tarjeta-comic:hover {
+            transform: translate(-5px, -5px) scale(1.02);
+            box-shadow: 15px 15px 0px var(--rosa-anime);
+            border-color: var(--rosa-anime);
         }
 
-        /* TAMAÑOS PERSONALIZADOS */
-        .header-central {
+        /* CLASES PARA COLORES ALTERNOS */
+        .borde-cian:hover {
+            box-shadow: 15px 15px 0px var(--cian-magico);
+            border-color: var(--cian-magico);
+        }
+        
+        .borde-morado:hover {
+            box-shadow: 15px 15px 0px var(--morado-oscuro);
+            border-color: var(--morado-oscuro);
+        }
+
+        .header-titulo {
             grid-column: 1 / -1;
             text-align: center;
-            background: transparent;
-            border: none;
-            backdrop-filter: none;
-            box-shadow: none;
-            padding: 10px;
-        }
-
-        .tarjeta-destacada {
-            grid-column: span 2;
-        }
-
-        @media (max-width: 768px) {
-            .tarjeta-destacada { grid-column: span 1; }
+            background: var(--cian-magico);
+            border: 5px solid var(--linea-comic);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 10px 10px 0px var(--linea-comic);
+            transform: rotate(-2deg);
+            margin-bottom: 20px;
         }
 
         /* ==========================================
            TIPOGRAFÍA Y TEXTOS
            ========================================== */
         h1 {
-            font-family: 'Caveat', cursive;
-            font-size: 5rem;
-            color: #fff;
-            text-shadow: 2px 2px 10px rgba(255, 126, 179, 0.4);
-            margin-bottom: 5px;
-            transform: rotate(-2deg);
+            font-family: 'Mochiy Pop One', sans-serif;
+            font-size: 3.5rem;
+            color: var(--blanco-papel);
+            text-shadow: 4px 4px 0px var(--linea-comic);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .subtitulo {
+            background: var(--blanco-papel);
+            display: inline-block;
+            padding: 5px 15px;
+            border: 3px solid var(--linea-comic);
+            border-radius: 20px;
+            font-weight: 700;
+            margin-top: 10px;
+            transform: rotate(2deg);
         }
 
         h2 {
-            font-family: 'Caveat', cursive;
-            font-size: 2.5rem;
-            color: var(--texto-titulos);
+            font-family: 'Mochiy Pop One', sans-serif;
+            font-size: 1.5rem;
+            color: var(--linea-comic);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            border-bottom: 4px dashed var(--linea-comic);
+            padding-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.15rem;
+            line-height: 1.6;
             margin-bottom: 15px;
-            line-height: 1.2;
-        }
-
-        p, li {
-            font-size: 1.1rem;
-            line-height: 1.7;
             font-weight: 600;
-            color: #6d5d62;
         }
 
-        /* LISTAS CUTE */
-        ul {
-            list-style: none;
+        /* ETIQUETAS DE HABILIDADES (Estilo RPG) */
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
             margin-top: 15px;
         }
-        
-        li {
-            margin-bottom: 12px;
-            background: rgba(255, 255, 255, 0.5);
-            padding: 12px 20px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: transform 0.3s ease, background 0.3s ease;
+
+        .tag-skill {
+            background: var(--fondo-vibrante);
+            border: 3px solid var(--linea-comic);
+            padding: 8px 15px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 3px 3px 0px var(--linea-comic);
+            transition: transform 0.1s;
         }
 
-        li:hover {
-            transform: scale(1.02);
-            background: rgba(255, 255, 255, 0.9);
-        }
-
-        /* EMOJIS COMO BULLETS */
-        .emoji-bullet {
-            font-size: 1.3rem;
+        .tag-skill:hover {
+            transform: scale(1.1);
+            background: var(--rosa-anime);
+            color: white;
         }
 
         /* ==========================================
-           COMPONENTES EXTRA
+           BOTÓN REPRODUCTOR
            ========================================== */
-        .reproductor-cute {
-            background: #fff;
-            padding: 15px 25px;
-            border-radius: 25px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-top: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
-        }
-
-        .btn-play {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: var(--texto-titulos);
-            border: none;
+        .btn-play-anime {
+            background: var(--rosa-anime);
             color: white;
-            font-size: 1.2rem;
+            border: 4px solid var(--linea-comic);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+            box-shadow: 5px 5px 0px var(--linea-comic);
+            transition: all 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: transform 0.2s;
+            padding-left: 5px; /* Centrar el triángulo */
         }
 
-        .btn-play:hover { transform: scale(1.1); }
+        .btn-play-anime:hover {
+            background: var(--cian-magico);
+            transform: scale(1.1);
+        }
 
-        .polaroid {
-            background: white;
-            padding: 10px 10px 25px 10px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            transform: rotate(3deg);
-            margin: 20px auto;
-            width: fit-content;
-            text-align: center;
-            font-family: 'Caveat', cursive;
-            font-size: 1.5rem;
-            color: var(--texto-titulos);
+        .music-box {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: #f0f0f0;
+            border: 3px solid var(--linea-comic);
+            padding: 15px;
+            border-radius: 15px;
         }
 
         footer {
             text-align: center;
-            margin-top: 60px;
-            font-family: 'Nunito', sans-serif;
-            font-weight: 800;
-            color: rgba(89, 74, 78, 0.6);
+            margin-top: 50px;
+            font-weight: 700;
+            background: var(--blanco-papel);
+            border: 4px solid var(--linea-comic);
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 20px;
+            box-shadow: 5px 5px 0px var(--linea-comic);
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
         }
     </style>
 </head>
 <body>
 
-    <div class="tablero">
+    <div class="escenario">
         
-        <div class="header-central">
-            <h1>El rincón de Valeria</h1>
-            <p style="font-size: 1.3rem; color: #fff; font-weight: 800;">Prohibido el paso a adultos (excepto a mi tía, ella es la mejor 💖)</p>
-        </div>
+        <!-- HEADER PRINCIPAL -->
+        <header class="header-titulo">
+            <h1>¡El Mundo de Valeria!</h1>
+            <div class="subtitulo">⚠️ Zona VIP: Prohibido adultos (Salvo mi tía, que es de mi gremio ⚔️)</div>
+        </header>
 
-        <div class="tarjeta-bubble">
-            <h2>✨ Un poco sobre mí</h2>
-            <p>Tengo 14 años y este es mi pequeño espacio en internet. Me encanta crear cosas, descubrir nueva música y pasar el rato.</p>
-            <ul>
-                <li><span class="emoji-bullet">🎨</span> Intentando mejorar en arte digital.</li>
-                <li><span class="emoji-bullet">🎮</span> Jugando a cosas divertidas con amigos.</li>
-                <li><span class="emoji-bullet">🍕</span> Defendiendo mi comida favorita.</li>
-            </ul>
-        </div>
-
-        <div class="tarjeta-bubble">
-            <h2>🎧 Mi Mood Musical</h2>
-            <p>La canción que no puedo dejar de escuchar esta semana:</p>
+        <!-- TARJETA 1: PERFIL (Morada) -->
+        <article class="tarjeta-comic borde-morado">
+            <h2>⭐ Ficha de Personaje</h2>
+            <p><strong>Nivel actual:</strong> 14 años.</p>
+            <p><strong>Clase:</strong> Creadora / Estudiante.</p>
+            <p>¡Hola! Este es mi cuartel general. Me encanta la cultura pop, la buena comida y reírme demasiado fuerte.</p>
             
-            <div class="reproductor-cute">
-                <button class="btn-play" onclick="alert('¡Aquí sonará la canción favorita de Valeria!')">▶</button>
+            <div class="skills">
+                <span class="tag-skill">💥 Energía infinita</span>
+                <span class="tag-skill">🎨 Dibujo Digital</span>
+                <span class="tag-skill">🎮 Pro Gamer</span>
+            </div>
+        </article>
+
+        <!-- TARJETA 2: MÚSICA (Rosa) -->
+        <article class="tarjeta-comic">
+            <h2>🎧 Opening Actual</h2>
+            <p>La canción que suena de fondo mientras salvo el mundo (o hago los deberes):</p>
+            
+            <div class="music-box">
+                <button class="btn-play-anime" onclick="alert('¡BAM! 💥 Aquí enlazaremos tu playlist favorita.')">▶</button>
                 <div>
-                    <p style="color: var(--texto-principal); font-weight: 800; font-size: 1.1rem; margin:0; line-height:1.2;">Canción Favorita</p>
-                    <p style="color: #a09397; font-size: 0.9rem; margin:0;">Artista Genial</p>
+                    <p style="margin-bottom: 0; font-size: 1.2rem; font-family: 'Mochiy Pop One', sans-serif;">Mi Canción Favorita</p>
+                    <p style="margin-bottom: 0; color: #666;">Artista o Banda Anime</p>
                 </div>
             </div>
-        </div>
+        </article>
 
-        <div class="tarjeta-bubble tarjeta-destacada">
-            <h2>📚 Cosas del Colegio (y la vida)</h2>
-            <p>Mis proyectos actuales y cosas de las que me siento orgullosa:</p>
-            <ul>
-                <li><span class="emoji-bullet">🌋</span> <strong>El Proyecto de Ciencias:</strong> Hicimos un experimento gigante.</li>
-                <li><span class="emoji-bullet">💻</span> <strong>Página Web:</strong> Aprendiendo a programar esto con mi tía.</li>
-                <li><span class="emoji-bullet">📖</span> <strong>Lectura:</strong> Terminando ese libro increíble de fantasía.</li>
-            </ul>
-        </div>
-
-        <div class="tarjeta-bubble" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-            <div class="polaroid">
-                <div style="width: 200px; height: 150px; background: #ffe4e1; border-radius: 5px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center;">
-                    <span style="font-size: 3rem;">📸</span>
+        <!-- TARJETA 3: PROYECTOS (Cian) -->
+        <article class="tarjeta-comic borde-cian" style="grid-column: 1 / -1;">
+            <h2>🔥 Arcos de Entrenamiento (Proyectos)</h2>
+            <p>Las misiones épicas que estoy completando en el colegio y en la vida:</p>
+            
+            <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px;">
+                <div style="flex: 1; min-width: 250px; background: #f0f0f0; border: 3px solid var(--linea-comic); padding: 15px; border-radius: 10px;">
+                    <h3 style="font-family: 'Mochiy Pop One', sans-serif; margin-bottom: 10px;">🧪 Misión: Ciencias</h3>
+                    <p style="font-size: 1rem;">Sobreviví al experimento del volcán con éxito.</p>
                 </div>
-                Mejor recuerdo
+                <div style="flex: 1; min-width: 250px; background: #f0f0f0; border: 3px solid var(--linea-comic); padding: 15px; border-radius: 10px;">
+                    <h3 style="font-family: 'Mochiy Pop One', sans-serif; margin-bottom: 10px;">💻 Misión: Código</h3>
+                    <p style="font-size: 1rem;">Programando mi propia web paso a paso.</p>
+                </div>
             </div>
-        </div>
+        </article>
 
     </div>
 
     <footer>
-        Hecho con 💖 por Valeria y su Tía | Espacio Seguro 🔒
+        Construido con magia ✨ por Valeria y su Tía 
     </footer>
 
 </body>
