@@ -81,25 +81,20 @@
             50% { opacity: 1; }
         }
 
-       // ENMASCARAMIENTO DE LETRAS (Efecto "Llegar de detrás" / Revelado Cinematográfico)
-tl.fromTo("#contenedor-tarjeta", 
-    { 
-        opacity: 0, 
-        y: 50, // Empieza 50px por debajo, "escondido"
-        scale: 1.05 // Un zoom muy sutil para dar sensación de profundidad
-    }, 
-    { 
-        opacity: 1, 
-        y: 0, // Llega a su posición final
-        scale: 1, // Vuelve a su tamaño real
-        duration: 2, 
-        ease: "power2.out" 
-    }, 
-    0.5 // Comienza en el 50% del scroll
-                backdrop-filter: blur(15px); /* Desenfoque del fondo al revelar */
-}
-);
-
+// GSAP: Animando la variable CSS de la máscara
+tl.to("#contenedor-tarjeta", {
+    duration: 2,
+    ease: "power2.out",
+    // Aquí actualizamos la variable CSS que definiste en el estilo
+    onUpdate: function() {
+        document.getElementById("contenedor-tarjeta").style.setProperty("--mask-size", this.targets()[0].style.getPropertyValue("--mask-size"));
+    },
+    // O mejor aún, deja que GSAP lo haga directamente:
+    keyframes: {
+        "--mask-size": ["0vw", "200vw"], // De 0 a un tamaño gigante que cubra todo
+        ease: "power2.out"
+    }
+}, 0.5);
             
             /* Aquí inyectamos el SVG con la palabra VALERIA como máscara */
             --mask-size: 0vw;
