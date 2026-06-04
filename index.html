@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>⚡ VALERIA // MUNDO ESPIRITUAL ⚡</title>
     
-    <!-- Fuente para la Interfaz y Cinzel para los botones -->
+    <!-- Fuentes -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
     
     <!-- FUENTE ESTILO GTA (Pricedown) -->
@@ -24,7 +24,7 @@
         :root {
             --sangre: #c41e3a;
             --nieve: #f0f8ff;
-            --noche: #050508; /* Tono muy oscuro para el fondo de la máscara */
+            --noche: #0a0a0f; /* Tono idéntico al fondo oscuro del poster de GTA */
             --oro: #ffd700;
             --veneno: #9400D3;
         }
@@ -52,7 +52,7 @@
             pointer-events: none;
         }
 
-        /* --- 2. CONTENEDOR DE SCROLL Y MÁSCARA SVG --- */
+        /* --- 2. CONTENEDOR DE SCROLL --- */
         .scroll-container {
             height: 350vh; 
             position: relative;
@@ -76,13 +76,26 @@
             width: 100vw; height: 100vh;
             z-index: 2;
             transform-origin: center center;
-            will-change: transform; /* Boost de rendimiento para la escala */
+            will-change: transform; 
+            opacity: 0; /* Oculto hasta que cargue la fuente */
+            transition: opacity 0.4s ease-out;
         }
 
+        .mask-overlay.fuente-lista {
+            opacity: 1;
+        }
+
+        /* TIPOGRAFÍA EXACTA DE GTA */
         .gta-text-svg {
             font-family: 'Pricedown', sans-serif;
-            font-size: 28vw;
-            letter-spacing: -0.02em; /* Las letras de GTA van muy pegadas */
+            font-size: 32vw;
+            letter-spacing: 0.02em;
+        }
+
+        .gta-stroke {
+            stroke: #ffffff; /* Borde blanco brillante típico */
+            stroke-width: 6px;
+            stroke-linejoin: round; /* Redondea las esquinas del borde, clave en el logo */
         }
 
         #scroll-hint {
@@ -90,16 +103,18 @@
             bottom: 40px;
             font-family: 'Cinzel', serif;
             letter-spacing: 3px;
-            color: rgba(255,255,255,0.5);
+            color: rgba(255,255,255,0.8);
             animation: pulse 2s infinite;
             z-index: 15;
             text-align: center;
             width: 100%;
             font-size: 0.9rem;
+            opacity: 0;
+            transition: opacity 0.5s ease;
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 0.2; }
+            0%, 100% { opacity: 0.3; }
             50% { opacity: 1; }
         }
 
@@ -126,7 +141,6 @@
             z-index: 100 !important; 
         }
 
-        /* Estilos Base Escritorio */
         .polaroid {
             width: 280px; height: 320px;
             background: #f0f0f0;
@@ -193,7 +207,7 @@
             box-shadow: 0 0 20px rgba(255,255,255,0.5);
         }
 
-        /* --- 4. CURSOR PERSONALIZADO --- */
+        /* --- 4. CURSOR --- */
         .cursor-magico {
             position: fixed;
             top: 0; left: 0;
@@ -206,39 +220,19 @@
             transition: background 1s ease, box-shadow 1s ease; 
         }
 
-        /* ==========================================================================
-           ADAPTACIÓN RESPONSIVA (MEDIA QUERIES)
-           ========================================================================== */
+        /* --- RESPONSIVE --- */
         @media (max-width: 768px) {
             * { cursor: auto; } 
             .cursor-magico { display: none !important; }
 
-            .gta-text-svg {
-                font-size: 38vw; /* Más grande en móvil para equilibrar */
-            }
+            .gta-text-svg { font-size: 42vw; }
+            .gta-stroke { stroke-width: 4px; } /* Borde un poco más fino en móvil */
 
-            .polaroid {
-                width: 170px; height: 210px;
-                padding: 8px 8px 35px 8px;
-                top: 12%; left: 6%;
-                transform: rotate(-5deg);
-            }
+            .polaroid { width: 170px; height: 210px; padding: 8px 8px 35px 8px; top: 12%; left: 6%; transform: rotate(-5deg); }
             .polaroid-text { font-size: 0.75rem; margin-top: 8px; }
-
-            .post-it {
-                width: 150px; height: 150px;
-                padding: 12px;
-                top: 18%; left: 54%;
-                transform: rotate(8deg);
-                font-size: 0.8rem;
-            }
+            .post-it { width: 150px; height: 150px; padding: 12px; top: 18%; left: 54%; transform: rotate(8deg); font-size: 0.8rem; }
             .post-it h3 { font-size: 0.95rem; margin-bottom: 5px !important; }
-
-            .pocion-musical {
-                width: 88%; max-width: 300px;
-                top: 55%; left: 6%;
-                padding: 20px 15px;
-            }
+            .pocion-musical { width: 88%; max-width: 300px; top: 55%; left: 6%; padding: 20px 15px; }
             .pocion-musical h2 { font-size: 1.2rem; }
             .pocion-musical p { font-size: 0.8rem; }
             .btn-magico { padding: 10px 20px; font-size: 0.85rem; letter-spacing: 1px; }
@@ -247,13 +241,11 @@
 </head>
 <body>
 
-    <!-- Cursor -->
     <div class="cursor-magico" id="cursor"></div>
 
     <!-- Fondo de Partículas -->
     <canvas id="canvas-anime"></canvas>
 
-    <!-- La Interfaz revelada -->
     <div id="universo-valeria">
         <div class="item-arrastrable polaroid" style="z-index: 6;">
             <div class="polaroid-img"></div>
@@ -277,30 +269,33 @@
         <div class="sticky-wrapper">
             <div id="scroll-hint">↓ ADÉNTRATE ↓</div>
             
-            <!-- Máscara SVG Mejorada para soporte perfecto de fuentes web -->
+            <!-- Estructura SVG Corregida: Máscara Transparente + Borde Blanco -->
             <div class="mask-overlay" id="text-mask">
                 <svg width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
                     <defs>
                         <mask id="gtaMask">
-                            <!-- El fondo blanco hace que lo oscuro sea visible -->
                             <rect width="100%" height="100%" fill="white" />
-                            <!-- El texto en negro hace que la máscara perfore el fondo oscuro, mostrando el canvas -->
+                            <!-- Texto negro recorta la máscara (transparente) -->
                             <text class="gta-text-svg" x="50%" y="50%" text-anchor="middle" dominant-baseline="central" fill="black">valeria</text>
                         </mask>
                     </defs>
-                    <!-- El cuadro oscuro que simula el fondo de la pantalla -->
+                    
+                    <!-- 1. Fondo Oscuro recortado -->
                     <rect width="100%" height="100%" fill="var(--noche)" mask="url(#gtaMask)" />
+                    
+                    <!-- 2. TRUCO PRO: El borde grueso de GTA dibujado por encima, con vector-effect 
+                         para que no se agrande y tapone la pantalla al hacer el mega-zoom -->
+                    <text class="gta-text-svg gta-stroke" x="50%" y="50%" text-anchor="middle" dominant-baseline="central" fill="none" vector-effect="non-scaling-stroke">valeria</text>
                 </svg>
             </div>
 
         </div>
     </div>
 
-    <!-- AUDIO -->
     <audio id="audio-tema" src="musica.mp3"></audio>
 
     <script>
-        // --- 1. CONFIGURACIÓN DEL SCROLL SUAVE (LENIS) ---
+        // --- 1. CONFIGURACIÓN DEL SCROLL ---
         const lenis = new Lenis({
             duration: 1.2,
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -326,9 +321,9 @@
         window.addEventListener("mousedown", () => gsap.to(cursor, { scale: 1.5, duration: 0.15 }));
         window.addEventListener("mouseup", () => gsap.to(cursor, { scale: 1, duration: 0.15 }));
 
-        // --- 3. UNIVERSO 3D (THREE.JS - Partículas) ---
+        // --- 3. UNIVERSO 3D ---
         const scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(0x050508, 0.0015);
+        scene.fog = new THREE.FogExp2(0x0a0a0f, 0.0015);
 
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
         camera.position.z = 500;
@@ -342,13 +337,11 @@
 
         const posArray = new Float32Array(particlesCount * 3);
         const colorsArray = new Float32Array(particlesCount * 3);
-        
         const baseColors = [];
         const targetColors = [];
 
         const colorVeneno1 = new THREE.Color('#9400D3'); 
         const colorVeneno2 = new THREE.Color('#00FA9A'); 
-        
         const colorFlor1 = new THREE.Color('#c41e3a'); 
         const colorFlor2 = new THREE.Color('#ffd700'); 
         const colorFlor3 = new THREE.Color('#ff69b4'); 
@@ -400,11 +393,9 @@
         let isBlooming = false;
         function animateParticles() {
             requestAnimationFrame(animateParticles);
-
             particlesMesh.rotation.y += 0.05 * (mouseX - particlesMesh.rotation.y);
             particlesMesh.rotation.x += 0.05 * (mouseY - particlesMesh.rotation.x);
             particlesMesh.rotation.z += (isBlooming ? 0.005 : 0.001);
-
             renderer.render(scene, camera);
         }
         animateParticles();
@@ -415,7 +406,7 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // --- 4. ANIMACIONES GSAP (SCROLL INVERTIDO & DRAG) ---
+        // --- 4. DRAG Y LÓGICA DE CARGA DE FUENTE ---
         gsap.registerPlugin(ScrollTrigger, Draggable);
 
         Draggable.create(".item-arrastrable", {
@@ -424,8 +415,16 @@
             onRelease: function() { gsap.set(this.target, { zIndex: 10 }); }
         });
 
-        // Esperamos a que la fuente "Pricedown" cargue antes de configurar las matemáticas del ScrollTrigger
-        document.fonts.ready.then(() => {
+        // PREVENCIÓN DE BUGS: Esperamos explícitamente a que Pricedown se descargue
+        document.fonts.load('10pt "Pricedown"').then(() => {
+            
+            // Hacemos visible el div una vez que la fuente web está lista
+            document.getElementById('text-mask').classList.add('fuente-lista');
+            document.getElementById('scroll-hint').style.opacity = "1";
+            
+            // Forzamos actualización por si hubo cambios de layout
+            ScrollTrigger.refresh();
+
             const tlScroll = gsap.timeline({
                 scrollTrigger: {
                     trigger: ".scroll-container",
@@ -442,14 +441,13 @@
             tlScroll.to("#scroll-hint", { opacity: 0, duration: 0.1 }, 0);
             tlScroll.to(particlesMesh.rotation, { z: Math.PI * 1.5, ease: "none" }, 0);
 
-            // NUEVO EFECTO MODO GTA: Escala masiva mediante transform (Mejor rendimiento y control)
-            // Empezamos con scale 300 (dentro del hueco de la letra "e") y terminamos en 1.
+            // EL ZOOM PERFECTO: Empezamos en scale 120 (estamos literalmente "dentro" del hueco de la 'e')
+            // Al bajar el scroll, se hace zoom-out revelando el borde estilo GTA.
             tlScroll.fromTo("#text-mask", 
-                { scale: 300 }, 
-                { scale: 1, ease: "power3.out" }, 
+                { scale: 120 }, 
+                { scale: 1, ease: "power2.out" }, 
             0);
 
-            // Revelar el Diario Alquímico al terminar
             tlScroll.to("#universo-valeria", {
                 opacity: 1,
                 pointerEvents: "auto", 
@@ -457,7 +455,7 @@
             }, "-=0.15");
         });
 
-        // --- 5. INTERACCIÓN DE AUDIO (VENENO A FLOR) ---
+        // --- 5. AUDIO ---
         const btnActivar = document.getElementById('btn-activar');
         const reproductorAudio = document.getElementById('audio-tema');
         const colorTransition = { progress: 0 };
@@ -486,7 +484,6 @@
                     onUpdate: function() {
                         const colors = particlesGeometry.attributes.color.array;
                         const p = colorTransition.progress;
-                        
                         for(let i = 0; i < particlesCount * 3; i++) {
                             colors[i] = baseColors[i] + (targetColors[i] - baseColors[i]) * p;
                         }
