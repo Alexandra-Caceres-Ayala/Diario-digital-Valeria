@@ -5,7 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>⚡ VALERIA // MUNDO ESPIRITUAL ⚡</title>
     
+    <!-- Fuente para la Interfaz y Cinzel para los botones -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- FUENTE ESTILO GTA (Pricedown) -->
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/pricedown');
+    </style>
     
     <!-- LIBRERÍAS: Animación, Scroll 3D e Interactividad -->
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
@@ -18,7 +24,7 @@
         :root {
             --sangre: #c41e3a;
             --nieve: #f0f8ff;
-            --noche: #0a0a12;
+            --noche: #050508; /* Tono muy oscuro para el fondo de la máscara */
             --oro: #ffd700;
             --veneno: #9400D3;
         }
@@ -46,7 +52,7 @@
             pointer-events: none;
         }
 
-        /* --- 2. CONTENEDOR DE SCROLL E INMERSIÓN --- */
+        /* --- 2. CONTENEDOR DE SCROLL Y MÁSCARA SVG --- */
         .scroll-container {
             height: 350vh; 
             position: relative;
@@ -67,21 +73,16 @@
         .mask-overlay {
             position: absolute;
             top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-color: #050508; 
+            width: 100vw; height: 100vh;
             z-index: 2;
-            
-            /* Empezamos con la máscara gigante para evitar flashes antes de que cargue GSAP */
-            --mask-size: 9000vw; 
-            -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 300'%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-family='Arial, sans-serif' font-weight='900' font-size='240' letter-spacing='5' fill='black'%3EVALERIA%3C/text%3E%3C/svg%3E");
-            -webkit-mask-position: center;
-            -webkit-mask-repeat: no-repeat;
-            -webkit-mask-size: var(--mask-size);
-            
-            mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 300'%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-family='Arial, sans-serif' font-weight='900' font-size='240' letter-spacing='5' fill='black'%3EVALERIA%3C/text%3E%3C/svg%3E");
-            mask-position: center;
-            mask-repeat: no-repeat;
-            mask-size: var(--mask-size);
+            transform-origin: center center;
+            will-change: transform; /* Boost de rendimiento para la escala */
+        }
+
+        .gta-text-svg {
+            font-family: 'Pricedown', sans-serif;
+            font-size: 28vw;
+            letter-spacing: -0.02em; /* Las letras de GTA van muy pegadas */
         }
 
         #scroll-hint {
@@ -208,11 +209,13 @@
         /* ==========================================================================
            ADAPTACIÓN RESPONSIVA (MEDIA QUERIES)
            ========================================================================== */
-        
         @media (max-width: 768px) {
             * { cursor: auto; } 
-            
             .cursor-magico { display: none !important; }
+
+            .gta-text-svg {
+                font-size: 38vw; /* Más grande en móvil para equilibrar */
+            }
 
             .polaroid {
                 width: 170px; height: 210px;
@@ -252,35 +255,44 @@
 
     <!-- La Interfaz revelada -->
     <div id="universo-valeria">
-        
-        <!-- Tarjeta Polaroid -->
         <div class="item-arrastrable polaroid" style="z-index: 6;">
             <div class="polaroid-img"></div>
             <div class="polaroid-text">Bocetos // 2026</div>
         </div>
-
-        <!-- Post-it Lore -->
         <div class="item-arrastrable post-it" style="z-index: 7;">
             <h3 style="margin-bottom: 10px; border-bottom: 2px solid #111;">STATUS</h3>
             <p><strong>Nivel:</strong> 14</p>
             <p><strong>Clase:</strong> Boticaria Digital</p>
             <p><strong>Quest:</strong> Sobrevivir.</p>
         </div>
-
-        <!-- Reproductor -->
         <div class="item-arrastrable pocion-musical" style="z-index: 8;">
             <h2 style="font-family: 'Cinzel', serif; margin-bottom: 10px;">Sincronización Sonora</h2>
             <p style="font-size: 0.9rem; color: #aaa;">Neutraliza las toxinas.</p>
             <button class="btn-magico" id="btn-activar">Hana ni Natte 🌸</button>
         </div>
-
     </div>
 
     <!-- Contenedor del efecto scroll -->
     <div class="scroll-container">
         <div class="sticky-wrapper">
             <div id="scroll-hint">↓ ADÉNTRATE ↓</div>
-            <div class="mask-overlay" id="text-mask"></div>
+            
+            <!-- Máscara SVG Mejorada para soporte perfecto de fuentes web -->
+            <div class="mask-overlay" id="text-mask">
+                <svg width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+                    <defs>
+                        <mask id="gtaMask">
+                            <!-- El fondo blanco hace que lo oscuro sea visible -->
+                            <rect width="100%" height="100%" fill="white" />
+                            <!-- El texto en negro hace que la máscara perfore el fondo oscuro, mostrando el canvas -->
+                            <text class="gta-text-svg" x="50%" y="50%" text-anchor="middle" dominant-baseline="central" fill="black">valeria</text>
+                        </mask>
+                    </defs>
+                    <!-- El cuadro oscuro que simula el fondo de la pantalla -->
+                    <rect width="100%" height="100%" fill="var(--noche)" mask="url(#gtaMask)" />
+                </svg>
+            </div>
+
         </div>
     </div>
 
@@ -316,7 +328,7 @@
 
         // --- 3. UNIVERSO 3D (THREE.JS - Partículas) ---
         const scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(0x0a0a12, 0.0015);
+        scene.fog = new THREE.FogExp2(0x050508, 0.0015);
 
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
         camera.position.z = 500;
@@ -412,41 +424,38 @@
             onRelease: function() { gsap.set(this.target, { zIndex: 10 }); }
         });
 
-        const tlScroll = gsap.timeline({
-            scrollTrigger: {
-                trigger: ".scroll-container",
-                start: "top top",
-                end: "bottom bottom",
-                scrub: 1.2,
-                onComplete: () => {
-                    lenis.stop();
-                    document.querySelector('.scroll-container').style.pointerEvents = "none";
+        // Esperamos a que la fuente "Pricedown" cargue antes de configurar las matemáticas del ScrollTrigger
+        document.fonts.ready.then(() => {
+            const tlScroll = gsap.timeline({
+                scrollTrigger: {
+                    trigger: ".scroll-container",
+                    start: "top top",
+                    end: "bottom bottom",
+                    scrub: 1.2,
+                    onComplete: () => {
+                        lenis.stop();
+                        document.querySelector('.scroll-container').style.pointerEvents = "none";
+                    }
                 }
-            }
+            });
+
+            tlScroll.to("#scroll-hint", { opacity: 0, duration: 0.1 }, 0);
+            tlScroll.to(particlesMesh.rotation, { z: Math.PI * 1.5, ease: "none" }, 0);
+
+            // NUEVO EFECTO MODO GTA: Escala masiva mediante transform (Mejor rendimiento y control)
+            // Empezamos con scale 300 (dentro del hueco de la letra "e") y terminamos en 1.
+            tlScroll.fromTo("#text-mask", 
+                { scale: 300 }, 
+                { scale: 1, ease: "power3.out" }, 
+            0);
+
+            // Revelar el Diario Alquímico al terminar
+            tlScroll.to("#universo-valeria", {
+                opacity: 1,
+                pointerEvents: "auto", 
+                duration: 0.3
+            }, "-=0.15");
         });
-
-        tlScroll.to("#scroll-hint", { opacity: 0, duration: 0.1 }, 0);
-        tlScroll.to(particlesMesh.rotation, { z: Math.PI * 1.5, ease: "none" }, 0);
-
-        // NUEVO EFECTO: Empieza gigante y se encoge a su tamaño normal
-        const tamañoFinal = window.innerWidth < 768 ? "75vw" : "15vw";
-
-        tlScroll.fromTo("#text-mask", 
-            { 
-                "--mask-size": "9000vw" 
-            }, 
-            {
-                "--mask-size": tamañoFinal,
-                ease: "power3.out"
-            }, 
-        0);
-
-        // Revelar el Diario Alquímico
-        tlScroll.to("#universo-valeria", {
-            opacity: 1,
-            pointerEvents: "auto", 
-            duration: 0.3
-        }, "-=0.15");
 
         // --- 5. INTERACCIÓN DE AUDIO (VENENO A FLOR) ---
         const btnActivar = document.getElementById('btn-activar');
