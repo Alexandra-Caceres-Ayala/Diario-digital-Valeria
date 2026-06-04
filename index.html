@@ -3,382 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚡ VALERIA // MUNDO ESPIRITUAL ⚡</title>
+    <title>El Mundo de Valeria</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
-    
-    <!-- LIBRERÍAS DE RENDIMIENTO Y ANIMACIÓN (2026) -->
-    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+    <!-- Librerías 2026 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <!-- Plugin Draggable para el efecto Scrapbook -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Draggable.min.js"></script>
 
     <style>
-        :root {
-            --sangre: #c41e3a;
-            --nieve: #f0f8ff;
-            --noche: #0a0a12;
-            --oro: #ffd700;
-        }
+        body { margin: 0; background-color: #0a0a12; overflow-x: hidden; font-family: sans-serif; }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; cursor: none; }
-
-        html.lenis { height: auto; }
-        .lenis.lenis-smooth { scroll-behavior: auto; }
-        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
-        .lenis.lenis-stopped { overflow: hidden; }
-        .lenis.lenis-scrolling iframe { pointer-events: none; }
-
-        body {
-            background-color: var(--noche);
-            color: var(--nieve);
-            font-family: 'Quicksand', sans-serif;
-            overflow-x: hidden;
-        }
-
-        #escenario-maestro {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            background-color: #000;
-        }
-
-        canvas {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 1;
-        }
-
-        .capa-parallax {
-            position: absolute;
-            font-family: 'Cinzel', serif;
-            color: rgba(255, 255, 255, 0.4);
-            letter-spacing: 5px;
-            z-index: 2;
-            pointer-events: none;
-        }
-
-        #hud-1 { top: 20%; left: 5%; font-size: 0.8rem; transform: rotate(-90deg); }
-        #hud-2 { bottom: 15%; right: 5%; font-size: 1.2rem; color: rgba(196, 30, 58, 0.5); }
+        /* --- 1. ZONA DE INMERSIÓN (MÁSCARA) --- */
+        .scroll-container { height: 300vh; position: relative; z-index: 10; }
+        .sticky-wrapper { position: sticky; top: 0; width: 100vw; height: 100vh; overflow: hidden; }
         
-        #texto-scroll {
+        .mask-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #0a0a12;
+            --mask-size: 15vw; 
+            -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 300'%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-family='Arial' font-weight='900' font-size='220' letter-spacing='5' fill='black'%3EVALERIA%3C/text%3E%3C/svg%3E");
+            -webkit-mask-position: center; -webkit-mask-repeat: no-repeat; -webkit-mask-size: var(--mask-size);
+            mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 300'%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-family='Arial' font-weight='900' font-size='220' letter-spacing='5' fill='black'%3EVALERIA%3C/text%3E%3C/svg%3E");
+            mask-position: center; mask-repeat: no-repeat; mask-size: var(--mask-size);
+        }
+
+        /* --- 2. EL SCRAPBOOK (LO QUE SE REVELA) --- */
+        .scrapbook-world {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: radial-gradient(circle at center, #2a1f3d 0%, #0a0a12 100%);
+            z-index: 1; /* Detrás de la máscara */
+            opacity: 0; /* Oculto al inicio */
+            pointer-events: none; /* Desactivado hasta que se revele */
+        }
+
+        /* Elementos arrastrables */
+        .item-arrastrable {
             position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 5;
-            font-family: 'Cinzel', serif;
-            font-size: 0.9rem;
-            letter-spacing: 2px;
-            animation: latido 2s infinite;
+            cursor: grab;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: transform 0.2s ease;
+        }
+        .item-arrastrable:active { cursor: grabbing; transform: scale(1.05); }
+
+        .polaroid {
+            width: 250px; height: 300px;
+            background: white; padding: 15px 15px 50px 15px;
+            top: 20%; left: 30%;
+            transform: rotate(-5deg);
+        }
+        
+        .polaroid-img {
+            width: 100%; height: 100%; background: #ddd; object-fit: cover;
         }
 
-        @keyframes latido {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
+        .post-it {
+            width: 200px; height: 200px;
+            background: #ccff00; color: #000;
+            padding: 20px; top: 50%; left: 60%;
+            transform: rotate(10deg); font-family: 'Comic Sans MS', cursive; /* Para el toque teen */
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
         }
 
-        #contenedor-tarjeta {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-            
-            /* Variables y enmascaramiento */
-            --mask-size: 0vw;
-            -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 300'%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-family='Arial, sans-serif' font-weight='900' font-size='220' letter-spacing='10' fill='black'%3EVALERIA%3C/text%3E%3C/svg%3E");
-            -webkit-mask-position: center;
-            -webkit-mask-repeat: no-repeat;
-            -webkit-mask-size: var(--mask-size);
-            mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 300'%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-family='Arial, sans-serif' font-weight='900' font-size='220' letter-spacing='10' fill='black'%3EVALERIA%3C/text%3E%3C/svg%3E");
-            mask-position: center;
-            mask-repeat: no-repeat;
-            mask-size: var(--mask-size);
-            backdrop-filter: blur(8px);
-            background: rgba(10, 10, 18, 0.7);
-        }
-
-        .tarjeta-magica {
-            border: 1px solid rgba(196, 30, 58, 0.6);
-            padding: 50px;
-            text-align: center;
-            background: rgba(0, 0, 0, 0.5);
-            max-width: 600px;
-            width: 100%;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-        }
-
-        h1 { font-family: 'Cinzel', serif; color: var(--nieve); font-size: 2.8rem; margin-bottom: 15px; letter-spacing: 3px; }
-        h1 span { color: var(--sangre); transition: color 1s ease; }
-        h1.bloom span { color: var(--oro); text-shadow: 0 0 15px var(--oro); }
-
-        .btn-magico {
-            background: transparent;
-            border: 1px solid var(--nieve);
-            color: var(--nieve);
-            padding: 15px 40px;
-            font-family: 'Cinzel', serif;
-            font-size: 1rem;
-            letter-spacing: 2px;
-            margin-top: 30px;
-            transition: all 0.4s ease;
-            text-transform: uppercase;
-        }
-
-        .btn-magico:hover {
-            background: var(--nieve);
-            color: var(--noche);
-            box-shadow: 0 0 30px rgba(255,255,255,0.3);
-            transform: translateY(-3px);
-        }
-
-        /* Cursor optimizado */
-        .gota-espiritu {
-            position: fixed;
-            top: 0; left: 0;
-            width: 15px; height: 15px;
-            background: var(--sangre);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            box-shadow: 0 0 15px var(--sangre);
-            transform: translate(-50%, -50%);
-            transition: background 1s ease, box-shadow 1s ease, width 0.3s, height 0.3s;
-        }
     </style>
 </head>
 <body>
 
-    <!-- Cursor customizado -->
-    <div class="gota-espiritu" id="cursor-magico"></div>
-
-    <div id="escenario-maestro">
+    <!-- Capa Revelada: El Scrapbook -->
+    <div class="scrapbook-world" id="universo-valeria">
         
-        <!-- Contenedor 3D -->
-        <canvas id="canvas-anime"></canvas>
+        <!-- Elementos de su portafolio -->
+        <div class="item-arrastrable polaroid">
+            <div class="polaroid-img" style="background: url('tu-arte.jpg') center/cover;"></div>
+            <p style="text-align: center; color: black; font-weight: bold; margin-top: 15px;">Arte Digital 2026</p>
+        </div>
 
-        <div class="capa-parallax" id="hud-1">SYS.SYNC: ACTIVE</div>
-        <div class="capa-parallax" id="hud-2">APOTHECARY BOUNDARY // 001</div>
-        <div id="texto-scroll">↓ INICIAR SINCRONIZACIÓN ↓</div>
-
-        <!-- MÁSCARA TIPOGRÁFICA -->
-        <div id="contenedor-tarjeta">
-            <div class="tarjeta-magica">
-                <h1 id="titulo-nombre">BIENVENIDA, <span>VALERIA</span></h1>
-                <p style="margin-bottom: 20px; font-size: 1.1rem; line-height: 1.8; color: #ccc;">
-                    Has cruzado el límite. Las toxinas se han neutralizado.
-                </p>
-                <p style="color: var(--oro); font-size: 0.9rem; letter-spacing: 2px;">STATUS: 100% CONNECTED</p>
-                
-                <button class="btn-magico" id="btn-activar">Desbloquear Audio</button>
-            </div>
+        <div class="item-arrastrable post-it">
+            <h3>STATUS:</h3>
+            <p>Nivel: 14<br>Energía: 20%<br>Viendo: Kusuriya no Hitorigoto 🌿</p>
         </div>
 
     </div>
 
-    <!-- AUDIO MP3 (Reemplaza con tu archivo Hana ni Natte) -->
-    <audio id="audio-tema" src="musica.mp3"></audio>
+    <!-- Capa Superior: El Scroll y la Máscara -->
+    <div class="scroll-container">
+        <div class="sticky-wrapper">
+            <div class="mask-overlay" id="text-mask"></div>
+        </div>
+    </div>
 
     <script>
-        // --- 1. CONFIGURACIÓN DE SCROLL (LENIS) ---
-        const lenis = new Lenis({
-            duration: 1.2,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            smooth: true
-        });
+        gsap.registerPlugin(ScrollTrigger, Draggable);
 
-        lenis.on('scroll', ScrollTrigger.update);
-        gsap.ticker.add((time) => { lenis.raf(time * 1000) });
-        gsap.ticker.lagSmoothing(0);
-
-        // --- 2. CURSOR OPTIMIZADO (GSAP) ---
-        const cursor = document.getElementById('cursor-magico');
-        const xTo = gsap.quickTo(cursor, "x", {duration: 0.2, ease: "power3"}),
-              yTo = gsap.quickTo(cursor, "y", {duration: 0.2, ease: "power3"});
-
-        window.addEventListener("mousemove", e => {
-            xTo(e.clientX);
-            yTo(e.clientY);
-        });
-
-        // --- 3. UNIVERSO 3D (THREE.JS) ---
-        const scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(0x0a0a12, 0.002);
-
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 400;
-
-        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('canvas-anime'), alpha: true, antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-        const particlesGeometry = new THREE.BufferGeometry();
-        const particlesCount = 4000;
-
-        const posArray = new Float32Array(particlesCount * 3);
-        const colorsArray = new Float32Array(particlesCount * 3);
-        
-        // Almacenamos colores base y destino para la transición óptima
-        const baseColors = [];
-        const targetColors = [];
-
-        const colorVeneno1 = new THREE.Color('#9400D3'); // Morado
-        const colorVeneno2 = new THREE.Color('#00FA9A'); // Verde tóxico
-        
-        const colorFlor1 = new THREE.Color('#c41e3a'); // Rojo carmesí
-        const colorFlor2 = new THREE.Color('#ffd700'); // Dorado
-        const colorFlor3 = new THREE.Color('#ff69b4'); // Rosa
-
-        for(let i = 0; i < particlesCount * 3; i+=3) {
-            posArray[i] = (Math.random() - 0.5) * 1200;
-            posArray[i+1] = (Math.random() - 0.5) * 1200;
-            posArray[i+2] = (Math.random() - 0.5) * 1200;
-
-            const baseColor = Math.random() > 0.5 ? colorVeneno1 : colorVeneno2;
-            baseColors.push(baseColor.r, baseColor.g, baseColor.b);
-            
-            const rand = Math.random();
-            const targetColor = rand < 0.33 ? colorFlor1 : (rand < 0.66 ? colorFlor2 : colorFlor3);
-            targetColors.push(targetColor.r, targetColor.g, targetColor.b);
-
-            colorsArray[i] = baseColor.r;
-            colorsArray[i+1] = baseColor.g;
-            colorsArray[i+2] = baseColor.b;
-        }
-
-        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-        particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colorsArray, 3));
-
-        const particlesMaterial = new THREE.PointsMaterial({
-            size: 3.5,
-            vertexColors: true,
-            blending: THREE.AdditiveBlending,
-            transparent: true,
-            opacity: 0.8
-        });
-
-        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-        scene.add(particlesMesh);
-
-        let mouseX = 0, mouseY = 0, targetX = 0, targetY = 0;
-        const windowHalfX = window.innerWidth / 2;
-        const windowHalfY = window.innerHeight / 2;
-
-        document.addEventListener('mousemove', (event) => {
-            mouseX = (event.clientX - windowHalfX);
-            mouseY = (event.clientY - windowHalfY);
-        });
-
-        let isBlooming = false;
-        const clock = new THREE.Clock();
-
-        function animateParticles() {
-            requestAnimationFrame(animateParticles);
-            targetX = mouseX * 0.001;
-            targetY = mouseY * 0.001;
-
-            particlesMesh.rotation.y += 0.05 * (targetX - particlesMesh.rotation.y);
-            particlesMesh.rotation.x += 0.05 * (targetY - particlesMesh.rotation.x);
-            particlesMesh.rotation.z += (isBlooming ? 0.008 : 0.002);
-
-            renderer.render(scene, camera);
-        }
-        animateParticles();
-
-        // Resize
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
-        // --- 4. ANIMACIONES GSAP (SCROLL) ---
-        gsap.registerPlugin(ScrollTrigger);
-
+        // 1. Animación del Scroll (Atravesar la palabra)
         const tl = gsap.timeline({
             scrollTrigger: {
-                trigger: "#escenario-maestro",
+                trigger: ".scroll-container",
                 start: "top top",
-                end: "+=400%", 
-                pin: true,     
-                scrub: 1.5,    
+                end: "bottom bottom",
+                scrub: 1,
+                onComplete: () => {
+                    // Cuando termina el scroll, ocultamos el contenedor de scroll
+                    document.querySelector('.scroll-container').style.display = 'none';
+                }
             }
         });
 
-        // Partículas giran como un túnel al hacer scroll
-        tl.to(particlesMesh.rotation, {
-            y: Math.PI * 2,
-            z: Math.PI * 1.5,
-            ease: "none"
-        }, 0);
+        tl.to("#text-mask", {
+            "--mask-size": "8000vw",
+            ease: "power4.in"
+        });
 
-        // Ocultar UI inicial
-        tl.to("#texto-scroll", { opacity: 0, duration: 0.1 }, 0);
-        tl.to("#hud-1", { y: -200, opacity: 0, ease: "none" }, 0);
-        tl.to("#hud-2", { y: 300, x: 100, opacity: 0, scale: 1.5, ease: "none" }, 0);
+        // 2. Revelar el Scrapbook y activar interacción
+        tl.to("#universo-valeria", {
+            opacity: 1,
+            pointerEvents: "auto", // Activar clics y arrastres
+            duration: 0.5
+        }, "-=0.2"); // Se solapa ligeramente con el final del zoom
 
-        // Enmascaramiento de letras (zoom tipográfico)
-        tl.fromTo("#contenedor-tarjeta", 
-            { "--mask-size": "0vw" },
-            { "--mask-size": "4000vw", ease: "power3.in" }, 
-            0.4
-        );
-
-        // --- 5. CLÍMAX "HANA NI NATTE" (CLICK EVENT) ---
-        const btnActivar = document.getElementById('btn-activar');
-        const reproductorAudio = document.getElementById('audio-tema');
-        const titulo = document.getElementById('titulo-nombre');
-
-        // Objeto virtual para tweenear los colores eficientemente
-        const colorTransition = { progress: 0 };
-
-        btnActivar.addEventListener('click', function() {
-            if(reproductorAudio.paused) {
-                reproductorAudio.play();
-                isBlooming = true;
-                
-                // Actualizar interfaz
-                this.innerText = "🌸 FLORACIÓN COMPLETADA 🌸";
-                this.style.background = "var(--sangre)";
-                this.style.color = "var(--nieve)";
-                this.style.boxShadow = "0 0 40px var(--sangre)";
-                this.style.border = "1px solid var(--sangre)";
-                
-                titulo.classList.add('bloom');
-                cursor.style.background = "var(--oro)";
-                cursor.style.boxShadow = "0 0 20px var(--oro)";
-
-                // Transición de partículas 3D (Veneno a Flor)
-                gsap.to(colorTransition, {
-                    progress: 1,
-                    duration: 3,
-                    ease: "power2.inOut",
-                    onUpdate: function() {
-                        const colors = particlesGeometry.attributes.color.array;
-                        const p = colorTransition.progress;
-                        
-                        for(let i = 0; i < particlesCount * 3; i++) {
-                            // Interpolación lineal entre color base y color destino
-                            colors[i] = baseColors[i] + (targetColors[i] - baseColors[i]) * p;
-                        }
-                        particlesGeometry.attributes.color.needsUpdate = true;
-                    }
-                });
-
-                // Movimiento dramático de cámara
-                gsap.to(camera.position, {
-                    z: 120,
-                    duration: 4,
-                    ease: "power4.out"
-                });
-            }
+        // 3. Hacer que los elementos se puedan arrastrar por toda la pantalla
+        Draggable.create(".item-arrastrable", {
+            bounds: window, // No pueden salir de la pantalla
+            inertia: true   // Movimiento fluido al soltar
         });
     </script>
 </body>
