@@ -7,7 +7,6 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
     
-    <!-- LIBRERÍAS DE 2026: Animación, Scroll 3D e Interactividad -->
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -37,7 +36,7 @@
             overflow-x: hidden;
         }
 
-        /* --- 1. FONDO 3D (Siempre visible de fondo) --- */
+        /* --- 1. FONDO 3D --- */
         #canvas-anime {
             position: fixed;
             top: 0; left: 0;
@@ -46,9 +45,9 @@
             pointer-events: none;
         }
 
-        /* --- 2. CONTENEDOR DE SCROLL E INMERSIÓN (Efecto GTA) --- */
+        /* --- 2. CONTENEDOR DE SCROLL E INMERSIÓN --- */
         .scroll-container {
-            height: 350vh; /* Define cuánto hay que scrollear para atravesar la letra */
+            height: 350vh; 
             position: relative;
             z-index: 10;
         }
@@ -68,11 +67,11 @@
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background-color: #050508; /* Oscuridad absoluta inicial */
+            background-color: #050508; 
             z-index: 2;
             
-            /* Máscara tipográfica animable */
-            --mask-size: 18vw; 
+            /* Máscara tipográfica ajustable */
+            --mask-size: 15vw; 
             -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 300'%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle' font-family='Arial, sans-serif' font-weight='900' font-size='240' letter-spacing='5' fill='black'%3EVALERIA%3C/text%3E%3C/svg%3E");
             -webkit-mask-position: center;
             -webkit-mask-repeat: no-repeat;
@@ -94,6 +93,7 @@
             z-index: 15;
             text-align: center;
             width: 100%;
+            font-size: 0.9rem;
         }
 
         @keyframes pulse {
@@ -101,12 +101,12 @@
             50% { opacity: 1; }
         }
 
-        /* --- 3. EL SCRAPBOOK (El Diario Alquímico revelado) --- */
+        /* --- 3. EL SCRAPBOOK (Diario Alquímico) --- */
         #universo-valeria {
             position: fixed;
             top: 0; left: 0;
             width: 100vw; height: 100vh;
-            z-index: 5;
+            z-index: 20; /* CORRECCIÓN: Por encima de scroll-container para permitir clics */
             opacity: 0; 
             pointer-events: none; 
             background: radial-gradient(circle at center, rgba(10,10,18,0.2) 0%, rgba(5,5,8,0.8) 100%);
@@ -116,16 +116,15 @@
         .item-arrastrable {
             position: absolute;
             cursor: grab;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: box-shadow 0.2s ease;
         }
         
         .item-arrastrable:active { 
             cursor: grabbing; 
-            transform: scale(1.05); 
             z-index: 100 !important; 
         }
 
-        /* Estilos de los elementos del Scrapbook */
+        /* Estilos Base Escritorio */
         .polaroid {
             width: 280px; height: 320px;
             background: #f0f0f0;
@@ -138,7 +137,7 @@
 
         .polaroid-img {
             width: 100%; height: 100%;
-            background: url('https://images.unsplash.com/photo-1541961017774-22349e4a1262?q=80&w=1000') center/cover; /* Reemplazar por su arte */
+            background: url('https://images.unsplash.com/photo-1541961017774-22349e4a1262?q=80&w=1000') center/cover;
             border-radius: 2px;
         }
 
@@ -161,9 +160,9 @@
             font-family: 'Comic Sans MS', cursive;
         }
 
-        /* El Frasco/Poción Musical */
         .pocion-musical {
-            top: 40%; left: 45%;
+            width: 320px;
+            top: 40%; left: 42%;
             background: rgba(20, 20, 30, 0.8);
             border: 1px solid var(--veneno);
             padding: 30px;
@@ -202,37 +201,88 @@
             pointer-events: none;
             z-index: 9999;
             box-shadow: 0 0 15px var(--veneno);
-            transform: translate(-50%, -50%);
-            transition: background 1s ease, box-shadow 1s ease, transform 0.1s;
+            transition: background 1s ease, box-shadow 1s ease; 
+        }
+
+        /* ==========================================================================
+           ADAPTACIÓN RESPONSIVA (MEDIA QUERIES)
+           ========================================================================== */
+        
+        @media (max-width: 768px) {
+            * { cursor: auto; } /* Devolvemos el cursor nativo en móviles */
+            
+            .cursor-magico { 
+                display: none !important; /* Ocultamos el div del cursor mágico en táctil */
+            }
+
+            .mask-overlay {
+                --mask-size: 75vw; /* Más grande en móvil para que sea legible verticalmente */
+            }
+
+            /* Re-diseño y re-ubicación del Scrapbook para pantallas pequeñas */
+            .polaroid {
+                width: 170px; height: 210px;
+                padding: 8px 8px 35px 8px;
+                top: 12%; left: 6%;
+                transform: rotate(-5deg);
+            }
+            .polaroid-text {
+                font-size: 0.75rem;
+                margin-top: 8px;
+            }
+
+            .post-it {
+                width: 150px; height: 150px;
+                padding: 12px;
+                top: 18%; left: 54%;
+                transform: rotate(8deg);
+                font-size: 0.8rem;
+            }
+            .post-it h3 {
+                font-size: 0.95rem;
+                margin-bottom: 5px !important;
+            }
+
+            .pocion-musical {
+                width: 88%;
+                max-width: 300px;
+                top: 55%; left: 6%;
+                padding: 20px 15px;
+            }
+            .pocion-musical h2 {
+                font-size: 1.2rem;
+            }
+            .pocion-musical p {
+                font-size: 0.8rem;
+            }
+            .btn-magico {
+                padding: 10px 20px;
+                font-size: 0.85rem;
+                letter-spacing: 1px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- Cursor -->
     <div class="cursor-magico" id="cursor"></div>
 
-    <!-- Fondo de Partículas -->
     <canvas id="canvas-anime"></canvas>
 
-    <!-- La Interfaz que se revela al atravesar la máscara -->
     <div id="universo-valeria">
         
-        <!-- Tarjeta Polaroid -->
         <div class="item-arrastrable polaroid" style="z-index: 6;">
             <div class="polaroid-img"></div>
             <div class="polaroid-text">Bocetos // 2026</div>
         </div>
 
-        <!-- Post-it Lore -->
         <div class="item-arrastrable post-it" style="z-index: 7;">
             <h3 style="margin-bottom: 10px; border-bottom: 2px solid #111;">STATUS</h3>
             <p><strong>Nivel:</strong> 14</p>
             <p><strong>Clase:</strong> Boticaria Digital</p>
-            <p><strong>Quest Actual:</strong> Sobrevivir a clases.</p>
+            <p><strong>Quest:</strong> Sobrevivir.</p>
         </div>
 
-        <!-- Reproductor / Desbloqueo -->
         <div class="item-arrastrable pocion-musical" style="z-index: 8;">
             <h2 style="font-family: 'Cinzel', serif; margin-bottom: 10px;">Sincronización Sonora</h2>
             <p style="font-size: 0.9rem; color: #aaa;">Neutraliza las toxinas.</p>
@@ -241,7 +291,6 @@
 
     </div>
 
-    <!-- Contenedor del efecto scroll -->
     <div class="scroll-container">
         <div class="sticky-wrapper">
             <div id="scroll-hint">↓ ADÉNTRATE ↓</div>
@@ -249,7 +298,6 @@
         </div>
     </div>
 
-    <!-- AUDIO -->
     <audio id="audio-tema" src="musica.mp3"></audio>
 
     <script>
@@ -264,8 +312,12 @@
         gsap.ticker.add((time) => { lenis.raf(time * 1000) });
         gsap.ticker.lagSmoothing(0);
 
-        // --- 2. CURSOR INTERACTIVO ---
+        // --- 2. CURSOR INTERACTIVO (CORREGIDO CON GSAP) ---
         const cursor = document.getElementById('cursor');
+        
+        // Centramos el punto de pivote usando GSAP en lugar de CSS transform
+        gsap.set(cursor, { xPercent: -50, yPercent: -50 });
+
         const xTo = gsap.quickTo(cursor, "x", {duration: 0.2, ease: "power3"});
         const yTo = gsap.quickTo(cursor, "y", {duration: 0.2, ease: "power3"});
 
@@ -274,9 +326,8 @@
             yTo(e.clientY);
         });
 
-        // Darle un efecto al hacer clic
-        window.addEventListener("mousedown", () => cursor.style.transform = "translate(-50%, -50%) scale(1.5)");
-        window.addEventListener("mouseup", () => cursor.style.transform = "translate(-50%, -50%) scale(1)");
+        window.addEventListener("mousedown", () => gsap.to(cursor, { scale: 1.5, duration: 0.15 }));
+        window.addEventListener("mouseup", () => gsap.to(cursor, { scale: 1, duration: 0.15 }));
 
         // --- 3. UNIVERSO 3D (THREE.JS - Partículas) ---
         const scene = new THREE.Scene();
@@ -290,7 +341,7 @@
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
         const particlesGeometry = new THREE.BufferGeometry();
-        const particlesCount = 4500;
+        const particlesCount = window.innerWidth < 768 ? 2500 : 4500; // Menos partículas en móvil para optimizar rendimiento
 
         const posArray = new Float32Array(particlesCount * 3);
         const colorsArray = new Float32Array(particlesCount * 3);
@@ -298,31 +349,25 @@
         const baseColors = [];
         const targetColors = [];
 
-        // Colores "Veneno" (Kusuriya no Hitorigoto)
         const colorVeneno1 = new THREE.Color('#9400D3'); 
         const colorVeneno2 = new THREE.Color('#00FA9A'); 
         
-        // Colores "Flor" (Hana ni Natte)
         const colorFlor1 = new THREE.Color('#c41e3a'); 
         const colorFlor2 = new THREE.Color('#ffd700'); 
         const colorFlor3 = new THREE.Color('#ff69b4'); 
 
         for(let i = 0; i < particlesCount * 3; i+=3) {
-            // Distribución espacial
             posArray[i] = (Math.random() - 0.5) * 1500;
             posArray[i+1] = (Math.random() - 0.5) * 1500;
             posArray[i+2] = (Math.random() - 0.5) * 1500;
 
-            // Guardar colores iniciales (veneno)
             const baseColor = Math.random() > 0.5 ? colorVeneno1 : colorVeneno2;
             baseColors.push(baseColor.r, baseColor.g, baseColor.b);
             
-            // Guardar colores finales (flor)
             const rand = Math.random();
             const targetColor = rand < 0.33 ? colorFlor1 : (rand < 0.66 ? colorFlor2 : colorFlor3);
             targetColors.push(targetColor.r, targetColor.g, targetColor.b);
 
-            // Asignar color actual
             colorsArray[i] = baseColor.r;
             colorsArray[i+1] = baseColor.g;
             colorsArray[i+2] = baseColor.b;
@@ -332,7 +377,7 @@
         particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colorsArray, 3));
 
         const particlesMaterial = new THREE.PointsMaterial({
-            size: 4,
+            size: window.innerWidth < 768 ? 5 : 4, // Partículas ligeramente más grandes en móviles
             vertexColors: true,
             blending: THREE.AdditiveBlending,
             transparent: true,
@@ -348,11 +393,18 @@
             mouseY = (e.clientY - window.innerHeight / 2) * 0.001;
         });
 
+        // Soporte giroscópico/táctil básico para mover partículas en móvil
+        document.addEventListener('touchmove', (e) => {
+            if(e.touches.length > 0) {
+                mouseX = (e.touches[0].clientX - window.innerWidth / 2) * 0.001;
+                mouseY = (e.touches[0].clientY - window.innerHeight / 2) * 0.001;
+            }
+        });
+
         let isBlooming = false;
         function animateParticles() {
             requestAnimationFrame(animateParticles);
 
-            // Rotación suave con el ratón y movimiento automático
             particlesMesh.rotation.y += 0.05 * (mouseX - particlesMesh.rotation.y);
             particlesMesh.rotation.x += 0.05 * (mouseY - particlesMesh.rotation.x);
             particlesMesh.rotation.z += (isBlooming ? 0.005 : 0.001);
@@ -367,14 +419,13 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // --- 4. ANIMACIONES GSAP (El Zoom de la Máscara y el Scrapbook) ---
+        // --- 4. ANIMACIONES GSAP (SCROLL & DRAG) ---
         gsap.registerPlugin(ScrollTrigger, Draggable);
 
-        // Hacer arrastrables los elementos del scrapbook
+        // Habilitar arrastre de elementos
         Draggable.create(".item-arrastrable", {
             bounds: window,
             onPress: function() {
-                // Elevar el elemento tocado sobre los demás
                 gsap.set(this.target, { zIndex: 100 });
             },
             onRelease: function() {
@@ -389,53 +440,47 @@
                 end: "bottom bottom",
                 scrub: 1.2,
                 onComplete: () => {
-                    // Evitar que el usuario haga scroll hacia arriba una vez dentro
-                    document.body.style.overflow = "hidden";
+                    // CORRECCIÓN: Detener Lenis de forma limpia mediante su API
+                    lenis.stop();
+                    // Bloqueamos los eventos del contenedor de scroll para liberar totalmente la interfaz inferior
+                    document.querySelector('.scroll-container').style.pointerEvents = "none";
                 }
             }
         });
 
-        // Desaparece el texto de ayuda
         tlScroll.to("#scroll-hint", { opacity: 0, duration: 0.1 }, 0);
-
-        // Rotación intensa de partículas durante el túnel del texto
         tlScroll.to(particlesMesh.rotation, { z: Math.PI * 1.5, ease: "none" }, 0);
 
-        // EFECTO GTA: Escalar la máscara inmensamente
+        // EFECTO GTA: Escalar la máscara inmensamente (funciona genial en pc y móvil)
         tlScroll.to("#text-mask", {
             "--mask-size": "9000vw", 
             ease: "power4.in"
         }, 0);
 
-        // Revelar el Diario Alquímico (Scrapbook) justo al final del zoom
         tlScroll.to("#universo-valeria", {
             opacity: 1,
             pointerEvents: "auto", 
             duration: 0.3
         }, "-=0.15");
 
-        // --- 5. INTERACCIÓN DE AUDIO (Veneno a Flor) ---
+        // --- 5. INTERACCIÓN DE AUDIO (VENENO A FLOR) ---
         const btnActivar = document.getElementById('btn-activar');
         const reproductorAudio = document.getElementById('audio-tema');
         const colorTransition = { progress: 0 };
 
         btnActivar.addEventListener('click', function() {
             if(reproductorAudio.paused) {
-                reproductorAudio.play();
+                reproductorAudio.play().catch(err => console.log("Audio bloqueado por navegador:", err));
                 isBlooming = true;
                 
-                // Cambios UI
                 this.innerText = "FLORACIÓN ACTIVA";
                 this.style.background = "var(--sangre)";
                 this.style.color = "var(--nieve)";
                 this.style.borderColor = "var(--sangre)";
                 document.querySelector('.pocion-musical').style.boxShadow = "0 0 40px rgba(196, 30, 58, 0.6)";
+                document.querySelector('.pocion-musical').style.borderColor = "var(--sangre)";
                 
-                // Cursor evoluciona a dorado
-                cursor.style.background = "var(--oro)";
-                cursor.style.boxShadow = "0 0 20px var(--oro)";
-
-                // Magia Three.js: Transformación de colores
+                // Animación de colores de partículas
                 gsap.to(colorTransition, {
                     progress: 1,
                     duration: 2.5,
@@ -451,9 +496,9 @@
                     }
                 });
 
-                // La cámara se adentra un poco más al ritmo de la explosión musical
+                // Zoom de cámara en la explosión musical
                 gsap.to(camera.position, {
-                    z: 250,
+                    z: window.innerWidth < 768 ? 300 : 250,
                     duration: 4,
                     ease: "power3.out"
                 });
