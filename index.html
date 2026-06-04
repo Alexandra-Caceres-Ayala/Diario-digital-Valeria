@@ -5,13 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>⚡ VALERIA // MUNDO ESPIRITUAL ⚡</title>
     
-    <!-- Fuentes -->
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
-    
-    <!-- FUENTE ESTILO GTA (Pricedown) -->
-    <style>
-        @import url('https://fonts.cdnfonts.com/css/pricedown');
-    </style>
+    <!-- Quicksand en peso 300 (Light) para calcar el estilo fino de tu imagen -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Quicksand:wght@300;400;700&display=swap" rel="stylesheet">
     
     <!-- LIBRERÍAS: Animación, Scroll 3D e Interactividad -->
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
@@ -24,7 +19,7 @@
         :root {
             --sangre: #c41e3a;
             --nieve: #f0f8ff;
-            --noche: #0a0a0f; 
+            --noche: #08080c; 
             --oro: #ffd700;
             --veneno: #9400D3;
         }
@@ -70,27 +65,20 @@
             align-items: center;
         }
 
-        .mask-overlay {
+        /* TEXTO OUTLINE EXACTO A TU IMAGEN */
+        .texto-outline {
             position: absolute;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            z-index: 2;
-            transform-origin: center center;
-            will-change: transform; 
-            opacity: 0; 
-            transition: opacity 0.4s ease-out;
-        }
-
-        .mask-overlay.fuente-lista {
-            opacity: 1;
-        }
-
-        /* TIPOGRAFÍA EXACTA DE GTA (Sin bordes inventados) */
-        .gta-text-svg {
-            font-family: 'Pricedown', sans-serif;
-            font-size: 32vw;
-            letter-spacing: -0.02em; /* Letras juntas como en el logo */
-            text-transform: lowercase; /* El estilo de GTA brilla en minúsculas */
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 300; /* Letra delgada */
+            font-size: 20vw;
+            color: transparent; /* El interior es invisible */
+            -webkit-text-stroke: 2px rgba(255, 255, 255, 0.7); /* El borde elegante */
+            letter-spacing: 0.05em;
+            text-align: center;
+            margin: 0;
+            top: 50%;
+            left: 50%;
+            will-change: transform;
         }
 
         #scroll-hint {
@@ -104,7 +92,6 @@
             text-align: center;
             width: 100%;
             font-size: 0.9rem;
-            opacity: 0;
             transition: opacity 0.5s ease;
         }
 
@@ -220,7 +207,10 @@
             * { cursor: auto; } 
             .cursor-magico { display: none !important; }
 
-            .gta-text-svg { font-size: 45vw; } 
+            .texto-outline { 
+                font-size: 32vw; 
+                -webkit-text-stroke: 1px rgba(255, 255, 255, 0.7); 
+            }
 
             .polaroid { width: 170px; height: 210px; padding: 8px 8px 35px 8px; top: 12%; left: 6%; transform: rotate(-5deg); }
             .polaroid-text { font-size: 0.75rem; margin-top: 8px; }
@@ -237,7 +227,6 @@
 
     <div class="cursor-magico" id="cursor"></div>
 
-    <!-- Fondo de Partículas -->
     <canvas id="canvas-anime"></canvas>
 
     <div id="universo-valeria">
@@ -263,28 +252,15 @@
         <div class="sticky-wrapper">
             <div id="scroll-hint">↓ ADÉNTRATE ↓</div>
             
-            <!-- SVG SÓLIDO (Efecto Ventana Perfecto) -->
-            <div class="mask-overlay" id="text-mask">
-                <svg width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
-                    <defs>
-                        <mask id="gtaMask">
-                            <rect width="100%" height="100%" fill="white" />
-                            <!-- Texto negro hace el recorte sólido -->
-                            <text class="gta-text-svg" x="50%" y="50%" text-anchor="middle" dominant-baseline="central" fill="black">valeria</text>
-                        </mask>
-                    </defs>
-                    <!-- Capa oscura de fondo que es perforada por la máscara -->
-                    <rect width="100%" height="100%" fill="var(--noche)" mask="url(#gtaMask)" />
-                </svg>
-            </div>
-
+            <!-- Texto Outline Limpio (Sin SVG pesado) -->
+            <h1 class="texto-outline" id="valeria-titular">valeria</h1>
+            
         </div>
     </div>
 
     <audio id="audio-tema" src="musica.mp3"></audio>
 
     <script>
-        // --- 1. CONFIGURACIÓN DEL SCROLL ---
         const lenis = new Lenis({
             duration: 1.2,
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -295,7 +271,6 @@
         gsap.ticker.add((time) => { lenis.raf(time * 1000) });
         gsap.ticker.lagSmoothing(0);
 
-        // --- 2. CURSOR INTERACTIVO ---
         const cursor = document.getElementById('cursor');
         gsap.set(cursor, { xPercent: -50, yPercent: -50 });
 
@@ -310,9 +285,8 @@
         window.addEventListener("mousedown", () => gsap.to(cursor, { scale: 1.5, duration: 0.15 }));
         window.addEventListener("mouseup", () => gsap.to(cursor, { scale: 1, duration: 0.15 }));
 
-        // --- 3. UNIVERSO 3D ---
         const scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(0x0a0a0f, 0.0015);
+        scene.fog = new THREE.FogExp2(0x08080c, 0.0015);
 
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
         camera.position.z = 500;
@@ -395,7 +369,6 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // --- 4. ANIMACIONES ---
         gsap.registerPlugin(ScrollTrigger, Draggable);
 
         Draggable.create(".item-arrastrable", {
@@ -404,42 +377,46 @@
             onRelease: function() { gsap.set(this.target, { zIndex: 10 }); }
         });
 
-        // Aseguramos carga de Pricedown
-        document.fonts.load('10pt "Pricedown"').then(() => {
-            document.getElementById('text-mask').classList.add('fuente-lista');
-            document.getElementById('scroll-hint').style.opacity = "1";
-            ScrollTrigger.refresh();
+        // Aseguramos el centro perfecto con GSAP
+        gsap.set("#valeria-titular", { xPercent: -50, yPercent: -50 });
 
-            const tlScroll = gsap.timeline({
-                scrollTrigger: {
-                    trigger: ".scroll-container",
-                    start: "top top",
-                    end: "bottom bottom",
-                    scrub: 1.2,
-                    onComplete: () => {
-                        lenis.stop();
-                        document.querySelector('.scroll-container').style.pointerEvents = "none";
-                    }
+        const tlScroll = gsap.timeline({
+            scrollTrigger: {
+                trigger: ".scroll-container",
+                start: "top top",
+                end: "bottom bottom",
+                scrub: 1.2,
+                onComplete: () => {
+                    lenis.stop();
+                    document.querySelector('.scroll-container').style.pointerEvents = "none";
                 }
-            });
-
-            tlScroll.to("#scroll-hint", { opacity: 0, duration: 0.1 }, 0);
-            tlScroll.to(particlesMesh.rotation, { z: Math.PI * 1.5, ease: "none" }, 0);
-
-            // Escala brutal sin bordes: puro fondo asomando
-            tlScroll.fromTo("#text-mask", 
-                { scale: 120 }, 
-                { scale: 1, ease: "power2.out" }, 
-            0);
-
-            tlScroll.to("#universo-valeria", {
-                opacity: 1,
-                pointerEvents: "auto", 
-                duration: 0.3
-            }, "-=0.15");
+            }
         });
 
-        // --- 5. AUDIO ---
+        tlScroll.to("#scroll-hint", { opacity: 0, duration: 0.1 }, 0);
+        tlScroll.to(particlesMesh.rotation, { z: Math.PI * 1.5, ease: "none" }, 0);
+
+        // ANIMACIÓN CORREGIDA: 
+        // force3D: false previene el crasheo de la tarjeta gráfica al hacer zooms masivos.
+        tlScroll.fromTo("#valeria-titular", 
+            { 
+                scale: 60, 
+                opacity: 0 // Aparece suavemente desde atrás
+            }, 
+            { 
+                scale: 1, 
+                opacity: 1,
+                ease: "power2.out",
+                force3D: false 
+            }, 
+        0);
+
+        tlScroll.to("#universo-valeria", {
+            opacity: 1,
+            pointerEvents: "auto", 
+            duration: 0.3
+        }, "-=0.15");
+
         const btnActivar = document.getElementById('btn-activar');
         const reproductorAudio = document.getElementById('audio-tema');
         const colorTransition = { progress: 0 };
