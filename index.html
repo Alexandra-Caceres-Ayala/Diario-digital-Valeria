@@ -24,7 +24,7 @@
         :root {
             --sangre: #c41e3a;
             --nieve: #f0f8ff;
-            --noche: #0a0a0f; /* Tono idéntico al fondo oscuro del poster de GTA */
+            --noche: #0a0a0f; 
             --oro: #ffd700;
             --veneno: #9400D3;
         }
@@ -77,7 +77,7 @@
             z-index: 2;
             transform-origin: center center;
             will-change: transform; 
-            opacity: 0; /* Oculto hasta que cargue la fuente */
+            opacity: 0; 
             transition: opacity 0.4s ease-out;
         }
 
@@ -85,17 +85,12 @@
             opacity: 1;
         }
 
-        /* TIPOGRAFÍA EXACTA DE GTA */
+        /* TIPOGRAFÍA EXACTA DE GTA (Sin bordes inventados) */
         .gta-text-svg {
             font-family: 'Pricedown', sans-serif;
             font-size: 32vw;
-            letter-spacing: 0.02em;
-        }
-
-        .gta-stroke {
-            stroke: #ffffff; /* Borde blanco brillante típico */
-            stroke-width: 6px;
-            stroke-linejoin: round; /* Redondea las esquinas del borde, clave en el logo */
+            letter-spacing: -0.02em; /* Letras juntas como en el logo */
+            text-transform: lowercase; /* El estilo de GTA brilla en minúsculas */
         }
 
         #scroll-hint {
@@ -225,8 +220,7 @@
             * { cursor: auto; } 
             .cursor-magico { display: none !important; }
 
-            .gta-text-svg { font-size: 42vw; }
-            .gta-stroke { stroke-width: 4px; } /* Borde un poco más fino en móvil */
+            .gta-text-svg { font-size: 45vw; } 
 
             .polaroid { width: 170px; height: 210px; padding: 8px 8px 35px 8px; top: 12%; left: 6%; transform: rotate(-5deg); }
             .polaroid-text { font-size: 0.75rem; margin-top: 8px; }
@@ -269,23 +263,18 @@
         <div class="sticky-wrapper">
             <div id="scroll-hint">↓ ADÉNTRATE ↓</div>
             
-            <!-- Estructura SVG Corregida: Máscara Transparente + Borde Blanco -->
+            <!-- SVG SÓLIDO (Efecto Ventana Perfecto) -->
             <div class="mask-overlay" id="text-mask">
                 <svg width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
                     <defs>
                         <mask id="gtaMask">
                             <rect width="100%" height="100%" fill="white" />
-                            <!-- Texto negro recorta la máscara (transparente) -->
+                            <!-- Texto negro hace el recorte sólido -->
                             <text class="gta-text-svg" x="50%" y="50%" text-anchor="middle" dominant-baseline="central" fill="black">valeria</text>
                         </mask>
                     </defs>
-                    
-                    <!-- 1. Fondo Oscuro recortado -->
+                    <!-- Capa oscura de fondo que es perforada por la máscara -->
                     <rect width="100%" height="100%" fill="var(--noche)" mask="url(#gtaMask)" />
-                    
-                    <!-- 2. TRUCO PRO: El borde grueso de GTA dibujado por encima, con vector-effect 
-                         para que no se agrande y tapone la pantalla al hacer el mega-zoom -->
-                    <text class="gta-text-svg gta-stroke" x="50%" y="50%" text-anchor="middle" dominant-baseline="central" fill="none" vector-effect="non-scaling-stroke">valeria</text>
                 </svg>
             </div>
 
@@ -406,7 +395,7 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // --- 4. DRAG Y LÓGICA DE CARGA DE FUENTE ---
+        // --- 4. ANIMACIONES ---
         gsap.registerPlugin(ScrollTrigger, Draggable);
 
         Draggable.create(".item-arrastrable", {
@@ -415,14 +404,10 @@
             onRelease: function() { gsap.set(this.target, { zIndex: 10 }); }
         });
 
-        // PREVENCIÓN DE BUGS: Esperamos explícitamente a que Pricedown se descargue
+        // Aseguramos carga de Pricedown
         document.fonts.load('10pt "Pricedown"').then(() => {
-            
-            // Hacemos visible el div una vez que la fuente web está lista
             document.getElementById('text-mask').classList.add('fuente-lista');
             document.getElementById('scroll-hint').style.opacity = "1";
-            
-            // Forzamos actualización por si hubo cambios de layout
             ScrollTrigger.refresh();
 
             const tlScroll = gsap.timeline({
@@ -441,8 +426,7 @@
             tlScroll.to("#scroll-hint", { opacity: 0, duration: 0.1 }, 0);
             tlScroll.to(particlesMesh.rotation, { z: Math.PI * 1.5, ease: "none" }, 0);
 
-            // EL ZOOM PERFECTO: Empezamos en scale 120 (estamos literalmente "dentro" del hueco de la 'e')
-            // Al bajar el scroll, se hace zoom-out revelando el borde estilo GTA.
+            // Escala brutal sin bordes: puro fondo asomando
             tlScroll.fromTo("#text-mask", 
                 { scale: 120 }, 
                 { scale: 1, ease: "power2.out" }, 
